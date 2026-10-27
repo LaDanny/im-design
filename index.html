@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>im Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700&display=swap">
 <style>
 /* Layout: one stage; a single dot gives birth to every shape of the mark */
 :root{--bg:#F4F4F2;--ink:#161615;--btn:#ffffff;color-scheme:light}
@@ -44,6 +45,11 @@ svg.nohover #play{transform:scale(0)}
 #over button:first-child{background:#161615;color:#fff}
 #over button:focus-visible{outline:2px solid #013BF6;outline-offset:2px}
 [hidden]{display:none!important}
+#jump text{font:700 95px "Inter Tight","Helvetica Neue",Arial,sans-serif;letter-spacing:-3px;fill:#161615;opacity:0;transition:opacity .25s ease;transform-box:fill-box;transform-origin:50% 100%;pointer-events:none}
+svg.canplay #jump text{opacity:1;animation:jhop .7s cubic-bezier(.3,0,.3,1) infinite}
+#jump text:nth-child(2){animation-delay:.1s;transition-delay:.05s}#jump text:nth-child(3){animation-delay:.2s;transition-delay:.1s}#jump text:nth-child(4){animation-delay:.3s;transition-delay:.15s}
+svg.canplay #t2{fill-opacity:0;transition:fill-opacity .2s}
+svg.nohover #jump text{opacity:0!important}
 </style>
 <style>body{margin:0}</style>
 </head>
@@ -103,6 +109,7 @@ svg.nohover #play{transform:scale(0)}
 </mask>
 <path d="M457.148 197V127.7H483.086C490.412 127.7 496.616 129.218 501.698 132.254C506.78 135.224 510.641 139.316 513.281 144.53C515.921 149.678 517.241 155.585 517.241 162.251C517.241 168.983 515.921 174.956 513.281 180.17C510.641 185.384 506.78 189.509 501.698 192.545C496.616 195.515 490.412 197 483.086 197H457.148ZM471.503 184.526H483.086C487.574 184.526 491.237 183.503 494.075 181.457C496.913 179.345 498.992 176.606 500.312 173.24C501.632 169.874 502.292 166.211 502.292 162.251C502.292 158.357 501.632 154.727 500.312 151.361C498.992 147.995 496.913 145.289 494.075 143.243C491.237 141.197 487.574 140.174 483.086 140.174H471.503V184.526Z" stroke-width="2" stroke="#161615" mask="url(#stroke9_19_108)"/>
 </g>
+<g id="jump" aria-hidden="true"><text>J</text><text>u</text><text>m</text><text>p</text></g>
 <g id="playg" transform="translate(106.5 117.7)"><path id="play" d="M-6 -9.5L10 0L-6 9.5Z" fill="none" stroke="#161615" stroke-width="1.5" stroke-linejoin="round"/></g>
 </svg>
 <canvas id="game" width="1648" height="494" hidden aria-label="Juego: toca o presiona espacio para saltar"></canvas>
@@ -151,6 +158,9 @@ function frame(now){
 }
 function start(){t0=performance.now()}
 start();requestAnimationFrame(frame);
+// ---------- "Jump" letters: lay out after the font loads ----------
+function layJump(){let xx=455;document.querySelectorAll('#jump text').forEach(t=>{t.setAttribute('x',xx);t.setAttribute('y',197);xx+=t.getComputedTextLength()-3});}
+layJump();(document.fonts&&document.fonts.ready.then(layJump));
 // ---------- portal: logo -> game ----------
 let mode='logo', tg0=0;
 const logo=$('logo'), cv=$('game'), over=$('over'), dotEl=$('dot');
