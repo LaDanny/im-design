@@ -17,17 +17,16 @@ button:focus-visible{outline:2px solid #013BF6;outline-offset:2px}
 /* hover: solid mark morphs into its outline version */
 svg{cursor:default}
 .shape{stroke-width:2;stroke-opacity:0;fill-opacity:1;transition:fill-opacity .55s cubic-bezier(.4,0,.2,1),stroke-opacity .35s ease}
-svg:hover .shape{fill-opacity:0;stroke-opacity:1}
+svg.outlined .shape{fill-opacity:0;stroke-opacity:1}
 #black{transition-delay:0s}#dot{transition-delay:.06s}#blue{transition-delay:.12s}#red{transition-delay:.18s}#t1{transition-delay:.24s}#t2{transition-delay:.3s}
-svg:not(:hover) .shape{transition-delay:0s}
-@media (hover:none){svg:active .shape{fill-opacity:0;stroke-opacity:1}}
+svg:not(.outlined) .shape{transition-delay:0s}
 
 .txf{transition:fill-opacity .45s cubic-bezier(.4,0,.2,1) .2s}
-svg:hover .txf{fill-opacity:0}
+svg.outlined .txf{fill-opacity:0}
 #txo{opacity:0;transition:opacity .45s cubic-bezier(.4,0,.2,1) .25s;pointer-events:none}
-svg:hover #txo{opacity:1}
-@media (hover:none){svg:active .txf{fill-opacity:0}svg:active #txo{opacity:1}}
+svg.outlined #txo{opacity:1}
 
+html.playing,html.playing body{touch-action:manipulation}
 .stage{position:relative;width:min(824px,100%)}
 .stage svg{width:100%}
 #game{position:absolute;inset:0;width:100%;height:100%;touch-action:manipulation;cursor:pointer}
@@ -47,8 +46,8 @@ svg.nohover #play{transform:scale(0)}
 [hidden]{display:none!important}
 #jump text{font:700 95px "Inter Tight","Helvetica Neue",Arial,sans-serif;letter-spacing:-3px;fill:#161615;pointer-events:none}
 .foot{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px max(24px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));border-top:1px solid #161615;background:#F4F4F2;font:600 14px "Inter Tight","Helvetica Neue",Arial,sans-serif;color:#161615;letter-spacing:-.01em}
-.foot a{color:#161615;text-decoration:none;display:inline-flex;align-items:center;gap:6px;border-bottom:1px solid transparent;transition:border-color .2s}
-.foot a:hover{border-color:#161615}
+.foot a{color:#161615;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+@media (hover:hover){.foot a:hover{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}}
 .foot a:focus-visible{outline:2px solid #013BF6;outline-offset:3px}
 svg.nohover #jump text{opacity:0!important}
 </style>
@@ -186,7 +185,12 @@ const logo=$('logo'), cv=$('game'), over=$('over'), dotEl=$('dot');
 function introDone(){return performance.now()-t0>3700}
 dotEl.addEventListener('pointerenter',()=>{if(mode==='logo'&&introDone())logo.classList.add('canplay')});
 dotEl.addEventListener('pointerleave',()=>logo.classList.remove('canplay'));
-dotEl.addEventListener('click',()=>{if(mode==='logo'&&introDone()){mode='toGame';tg0=performance.now();logo.classList.remove('canplay');logo.classList.add('nohover')}});
+dotEl.addEventListener('click',()=>{if(mode==='logo'&&introDone()){mode='toGame';tg0=performance.now();logo.classList.remove('outlined');logo.classList.remove('canplay');logo.classList.add('nohover')}});
+
+// outline toggle: mouse = hover, touch = each tap flips it
+logo.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')logo.classList.add('outlined')});
+logo.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')logo.classList.remove('outlined')});
+logo.addEventListener('pointerup',e=>{if(e.pointerType!=='mouse'&&mode==='logo'&&e.target!==dotEl)logo.classList.toggle('outlined')});
 setInterval(()=>dotEl.classList.toggle('ready',mode==='logo'&&introDone()),300);
 function toGameFrame(now){
   if(mode!=='toGame')return;
@@ -213,7 +217,7 @@ let hi=0;try{hi=+localStorage.getItem('imjump')||0}catch(e){}
 let gs,held=false;
 function newGame(play){gs={mode:play?'play':'ready',t:0,y:0,vy:0,sq:0,obs:[],spd:5.5,next:50,score:0,ground:true,lv:1,flash:0}}
 function jump(){if(mode!=='game'||gs.mode!=='play')return;if(gs.ground){gs.vy=-11.5;gs.ground=false;gs.sq=-.25}}
-cv.addEventListener('pointerdown',e=>{e.preventDefault();held=true;jump()});
+document.addEventListener('pointerdown',e=>{if(mode!=='game'||e.target.closest('.foot,#over'))return;e.preventDefault();held=true;if(gs.mode==='over'){over.hidden=true;newGame(true)}else jump()});
 addEventListener('pointerup',()=>held=false);
 addEventListener('keydown',e=>{if(mode==='game'&&(e.code==='Space'||e.code==='ArrowUp')){e.preventDefault();if(!e.repeat){held=true;if(gs.mode==='over'){over.hidden=true;newGame(true)}else jump()}}});
 addEventListener('keyup',e=>{if(e.code==='Space'||e.code==='ArrowUp')held=false});
@@ -258,6 +262,6 @@ newGame(false);
 
 </script>
 
-<footer class="foot"><span>I’m Danny Del Castillo</span><a id="li" href="https://www.linkedin.com/in/ladanny/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a></footer>
+<footer class="foot"><span>I’m Danny Del Castillo</span><a id="li" href="https://www.linkedin.com/in/ladanny/" target="_blank" rel="noopener">LinkedIn <svg aria-hidden="true" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M2 9L9 2M3.5 2H9V7.5"/></svg></a></footer>
 </body>
 </html>
