@@ -48,6 +48,7 @@ svg.nohover #play{transform:scale(0)}
 #jump text{font:700 95px "Inter Tight","Helvetica Neue",Arial,sans-serif;letter-spacing:-3px;fill:#161615;opacity:0;transition:opacity .25s ease;transform-box:fill-box;transform-origin:50% 100%;pointer-events:none}
 svg.canplay #jump text{opacity:1;animation:jhop .7s cubic-bezier(.3,0,.3,1) infinite}
 #jump text:nth-child(2){animation-delay:.1s;transition-delay:.05s}#jump text:nth-child(3){animation-delay:.2s;transition-delay:.1s}#jump text:nth-child(4){animation-delay:.3s;transition-delay:.15s}
+@keyframes jhop{0%,100%{transform:translateY(0) scaleY(1)}12%{transform:translateY(0) scaleY(.92)}45%{transform:translateY(-14px) scaleY(1.04)}80%{transform:translateY(0) scaleY(1)}}
 svg.canplay #t2{fill-opacity:0;transition:fill-opacity .2s}
 svg.nohover #jump text{opacity:0!important}
 </style>
