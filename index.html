@@ -45,6 +45,10 @@ svg.nohover #play{transform:scale(0)}
 #over button:first-child{background:#161615;color:#fff}
 #over button:focus-visible{outline:2px solid #013BF6;outline-offset:2px}
 [hidden]{display:none!important}
+.foot{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px max(24px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));border-top:1px solid #161615;background:#F4F4F2;font:600 14px "Inter Tight","Helvetica Neue",Arial,sans-serif;color:#161615;letter-spacing:-.01em}
+.foot a{color:#161615;text-decoration:none;display:inline-flex;align-items:center;gap:6px;border-bottom:1px solid transparent;transition:border-color .2s}
+.foot a:hover{border-color:#161615}
+.foot a:focus-visible{outline:2px solid #013BF6;outline-offset:3px}
 #jump text{font:700 95px "Inter Tight","Helvetica Neue",Arial,sans-serif;letter-spacing:-3px;fill:#161615;opacity:0;transition:opacity .25s ease;transform-box:fill-box;transform-origin:50% 100%;pointer-events:none}
 svg.canplay #jump text{opacity:1;animation:jhop .7s cubic-bezier(.3,0,.3,1) infinite}
 #jump text:nth-child(2){animation-delay:.1s;transition-delay:.05s}#jump text:nth-child(3){animation-delay:.2s;transition-delay:.1s}#jump text:nth-child(4){animation-delay:.3s;transition-delay:.15s}
@@ -240,5 +244,6 @@ newGame(false);
 
 </script>
 
+<footer class="foot"><span>Danny Del Castillo</span><a id="li" href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a></footer>
 </body>
 </html>
