@@ -58,7 +58,12 @@ svg.nohover #jump text{opacity:0!important}
 .go{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:20px 40px;padding:8px 2px}
 .go-head{min-width:0}
 .go h2{margin:0;font-weight:800;font-size:clamp(64px,15vw,132px);line-height:.82;letter-spacing:-.055em;margin-left:-.04em}
-.go h2 .pt{color:#F8A829}
+.go h2 .pt{display:inline-block;width:.17em;height:.17em;border-radius:50%;background:#F8A829;margin-left:.05em;visibility:hidden;transform-origin:50% 100%}
+.go h2 .pt.on{visibility:visible}
+.go h2 .pt.alive{animation:ptIdle 3.4s ease-in-out infinite}
+@keyframes ptIdle{0%,78%,100%{transform:none}84%{transform:translateY(-3px) scale(.97,1.03)}90%{transform:translateY(0) scale(1.04,.96)}95%{transform:scale(.99,1.01)}}
+#bx{position:fixed;left:0;top:0;border-radius:50%;background:#F8A829;z-index:5;pointer-events:none;will-change:transform}
+@media (prefers-reduced-motion:reduce){.go h2 .pt.alive{animation:none}}
 .go-sub{margin:14px 0 0 4px;font-weight:600;font-size:12px;letter-spacing:.16em}
 .go-side{display:flex;flex-direction:column;gap:18px;border-left:1px solid #161615;padding-left:24px;padding-bottom:4px}
 .go-stats{display:flex;gap:28px;margin:0}
@@ -141,8 +146,9 @@ svg.nohover #jump text{opacity:0!important}
 <g id="playg" transform="translate(106.5 117.7)"><path id="play" d="M-6 -9.5L10 0L-6 9.5Z" fill="none" stroke="#161615" stroke-width="1.5" stroke-linejoin="round"/></g>
 </svg>
 <canvas id="game" width="1648" height="494" hidden aria-label="Juego: toca o presiona espacio para saltar"></canvas>
+<div id="bx" aria-hidden="true" hidden></div>
 <div id="over" hidden role="dialog" aria-labelledby="oops"><div class="go">
-<div class="go-head"><h2 id="oops" data-s="1">OOPS<span class="pt">.</span></h2><p class="go-sub" data-s="2">THAT WAS INTERESTING.</p></div>
+<div class="go-head"><h2 id="oops" data-s="1" aria-label="OOPS.">OOPS<span class="pt" aria-hidden="true"></span></h2><p class="go-sub" data-s="2">THAT WAS INTERESTING.</p></div>
 <div class="go-side" data-s="3"><dl class="go-stats"><div><dt>SCORE</dt><dd id="goScore">0</dd></div><div><dt>BEST</dt><dd id="goBest">0</dd></div></dl>
 <div class="go-act"><button id="retry" type="button">PLAY AGAIN <svg aria-hidden="true" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M2 9L9 2M3.5 2H9V7.5"/></svg></button><button id="back" type="button">BACK TO LOGO</button></div></div>
 </div></div>
@@ -337,39 +343,60 @@ function drawMsg(now){
 let lastKey=false;addEventListener('keydown',()=>lastKey=true,true);addEventListener('pointerdown',()=>lastKey=false,true);
 const DIE_MS=650; let goTimers=[];
 // four quarter-pieces of the circle, each drifting its own way
-const FRAGS=[{d:1.0,r:.45,g:2},{d:.65,r:-.3,g:-4},{d:1.25,r:.22,g:6},{d:.85,r:-.55,g:10}];
-function startDie(cx,cy){
+function startDie(cx,cy,nx,ny){
   if(gs.mode!=='play')return;                      // exactly once per collision
-  gs.mode='dying';Snd.sfx('oops');Snd.duck(.35);gs.msg=null;held=false;gs.canRestart=false;
-  gs.die={t0:performance.now(),cx,cy,r:BR};
+  gs.mode='dying';gs.msg=null;held=false;gs.canRestart=false;Snd.sfx('oops');Snd.duck(.35);
+  let dx=nx-cx,dy=ny-cy,l=Math.hypot(dx,dy)||1;dx/=l;dy/=l;   // impact direction (ball -> obstacle)
+  gs.die={t0:performance.now(),cx,cy,r:BR,dx,dy,fx:cx,fy:cy};
 }
-function drawFrags(now){
-  const D=gs.die, rm=RM.matches, p=Math.min(1,(now-D.t0)/(rm?150:DIE_MS));
-  const m=E.io(Math.min(1,p/.7)), fade=rm?1-p:1-E.io(Math.max(0,(p-.4)/.6));
-  x.fillStyle=COL.y;x.globalAlpha=Math.max(0,fade);
-  FRAGS.forEach((f,k)=>{
-    const a0=k*Math.PI/2, dir=a0+Math.PI/4, dist=rm?0:16*f.d*m;
-    const px=D.cx+Math.cos(dir)*dist, py=D.cy+Math.sin(dir)*dist+(rm?0:f.g*m);
-    x.save();x.translate(px,py);x.rotate(rm?0:f.r*m);
-    x.beginPath();x.moveTo(0,0);x.arc(0,0,D.r,a0,a0+Math.PI/2);x.closePath();x.fill();x.restore();
-  });
-  x.globalAlpha=1;
-  if(p>=1&&gs.mode==='dying'){gs.mode='over';showOver()}
+// BOING: squash into the hit, bounce back with a stretch, settle with a small wobble. The ball survives.
+function drawBoing(now){
+  const D=gs.die, rm=RM.matches, T=rm?150:DIE_MS, t=Math.min(1,(now-D.t0)/T), ms=t*T;
+  let off=0,lift=0,sa=1,sp=1,tilt=0;                  // sa: scale along impact axis, sp: perpendicular
+  if(!rm){
+    if(ms<90){const k=E.io(ms/90);sa=1-.18*k;sp=1+.1*k}                                   // squash into the obstacle
+    else if(ms<300){const k=(ms-90)/210,e=E.io(k);off=14*e;lift=Math.sin(Math.PI*k)*12;     // bounce back, small arc
+      sa=L(.82,1.08,E.io(Math.min(1,k*1.6)))-.08*Math.max(0,k*1.6-1)*.5;sp=L(1.1,.95,E.io(Math.min(1,k*1.6)));}
+    else{const k=(ms-300)/(T-300),w=Math.sin(k*Math.PI*3)*Math.exp(-k*3.2);off=14;     // regain balance
+      sa=1+.05*w;sp=1-.05*w;tilt=w*.35;off+=w*2.5;}
+  }
+  const ang=Math.atan2(D.dy,D.dx), px=D.cx-D.dx*off, py=Math.min(D.cy-D.dy*off-lift, G-D.r*sp);
+  D.fx=px;D.fy=py;
+  x.save();x.translate(px,py);x.rotate(ang+tilt);x.beginPath();x.ellipse(0,0,D.r*sa,D.r*sp,0,0,Math.PI*2);x.fillStyle=COL.y;x.fill();x.restore();
+  if(t>=1&&gs.mode==='dying'){gs.mode='over';showOver()}
+}
+// the ball hops from the game into the period of OOPS.
+let bxAnim=null;
+function flyBall(){
+  const bx=$('bx'),pt=over.querySelector('.pt'),D=gs.die,cr=cv.getBoundingClientRect(),sc=cr.width/W;
+  const sx=cr.left+D.fx*sc, sy=cr.top+D.fy*sc, sd=D.r*2*sc;
+  const pr=pt.getBoundingClientRect(), ex=pr.left+pr.width/2, ey=pr.top+pr.height/2, ed=pr.width;
+  bx.style.width=bx.style.height=sd+'px';bx.hidden=false;
+  const tf=(x_,y_,d,sx_=1,sy_=1)=>`translate(${x_-sd/2}px,${y_-sd/2}px) scale(${d/sd*sx_},${d/sd*sy_})`;
+  const mx=(sx+ex)/2, my=Math.min(sy,ey)-Math.max(60,Math.abs(ex-sx)*.25);
+  if(RM.matches){pt.classList.add('on');bx.hidden=true;return}
+  bxAnim=bx.animate([
+    {transform:tf(sx,sy,sd,1.06,.94),offset:0},
+    {transform:tf(mx,my,(sd+ed)/2,.94,1.06),offset:.5,easing:'cubic-bezier(.4,0,.8,.6)'},
+    {transform:tf(ex,ey,ed,1.12,.88),offset:.88},
+    {transform:tf(ex,ey,ed),offset:1}],{duration:460,easing:'cubic-bezier(.3,.6,.4,1)',fill:'forwards'});
+  bxAnim.onfinish=()=>{pt.classList.add('on','alive');bx.hidden=true;bxAnim=null};
 }
 function showOver(){
   $('goScore').textContent=Math.floor(gs.score);$('goBest').textContent=hi;
-  over.className='';over.hidden=false;
+  over.className='';over.hidden=false;const pt=over.querySelector('.pt');pt.className='pt';
   const st=(c,ms)=>goTimers.push(setTimeout(()=>over.classList.add(c),ms));
-  st('s1',20);st('s2',110);st('s3',220);
+  st('s1',20);goTimers.push(setTimeout(flyBall,40));st('s2',140);st('s3',260);
   goTimers.push(setTimeout(()=>{gs.canRestart=true;if(lastKey)$('retry').focus({preventScroll:true})},300));
 }
-function hideOver(){goTimers.forEach(clearTimeout);goTimers=[];over.hidden=true;over.className=''}
-function restartGame(){hideOver();held=false;newGame(true);Snd.level(1);Snd.start();Snd.duck(.9)}
+function hideOver(){goTimers.forEach(clearTimeout);goTimers=[];if(bxAnim){bxAnim.cancel();bxAnim=null}$('bx').hidden=true;over.hidden=true;over.className='';over.querySelector('.pt').className='pt'}
+function restartGame(){hideOver();held=false;newGame(true);if(!RM.matches)gs.sq=-.22;Snd.level(1);Snd.start();Snd.duck(.9)}
 function newGame(play){gs={mode:play?'play':'ready',t:0,y:0,vy:0,sq:0,obs:[],spd:5.5,next:50,score:0,ground:true,lv:1,msg:null,shown:{}};if(play)showMsg(1)}
 function jump(){if(mode!=='game'||gs.mode!=='play'||msgPausing())return;if(gs.ground){Snd.sfx('jump');gs.vy=-11.5;gs.ground=false;gs.sq=-.25}}
 document.addEventListener('pointerdown',e=>{if(mode!=='game'||e.target.closest('.foot,#over'))return;e.preventDefault();held=true;if(gs.mode==='over'){if(gs.canRestart)restartGame()}else jump()});
 addEventListener('pointerup',()=>held=false);
-addEventListener('keydown',e=>{if(mode==='game'&&(e.code==='Space'||e.code==='ArrowUp')){e.preventDefault();if(!e.repeat){held=true;if(gs.mode==='over'){if(gs.canRestart)restartGame()}else jump()}}});
+addEventListener('keydown',e=>{if(mode==='game'&&e.code==='Enter'&&gs.mode==='over'&&gs.canRestart&&document.activeElement.tagName!=='BUTTON'){e.preventDefault();restartGame();return}
+  if(mode==='game'&&(e.code==='Space'||e.code==='ArrowUp')){e.preventDefault();if(!e.repeat){held=true;if(gs.mode==='over'){if(gs.canRestart)restartGame()}else jump()}}});
 addEventListener('keyup',e=>{if(e.code==='Space'||e.code==='ArrowUp')held=false});
 function spawn(){
   const Lv=gs.lv,r=Math.random();
@@ -390,7 +417,7 @@ function gstep(){
   gs.obs.forEach(o=>o.x-=gs.spd);gs.obs=gs.obs.filter(o=>o.x+o.w>-10);
   const cx=PX,cy=G-BR+gs.y;
   for(const o of gs.obs){const nx=Math.max(o.x,Math.min(cx,o.x+o.w)),ny=Math.max(G-o.h,Math.min(cy,G));
-    if((cx-nx)**2+(cy-ny)**2<(BR-3)**2){if(gs.score>hi){hi=Math.floor(gs.score);try{localStorage.setItem('imjump',hi)}catch(e){}}startDie(cx,cy);return}}
+    if((cx-nx)**2+(cy-ny)**2<(BR-3)**2){if(gs.score>hi){hi=Math.floor(gs.score);try{localStorage.setItem('imjump',hi)}catch(e){}}startDie(cx,cy,nx,ny);return}}
 }
 function gdraw(){
   x.clearRect(0,0,W,247);
@@ -398,7 +425,7 @@ function gdraw(){
   x.fillStyle=COL.ink;x.fillRect(0,G-1,W,2);
   for(const o of gs.obs){if(o.clear){const k=Math.min(1,(performance.now()-o.clear)/(RM.matches?150:450)),e=E.io(k),h=o.h*(1-e);if(h>.5){x.globalAlpha=1-e*.6;x.fillStyle=o.c;x.fillRect(o.x,G-h,o.w,h);x.globalAlpha=1}continue}if(out){x.strokeStyle=o.c;x.lineWidth=2;x.strokeRect(o.x+1,G-o.h+1,o.w-2,o.h-2)}else{x.fillStyle=o.c;x.fillRect(o.x,G-o.h,o.w,o.h)}}
   gs.sq*=.82;const rx=BR*(1+gs.sq),ry=BR*(1-gs.sq);
-  if(dying)drawFrags(performance.now());else if(!out){x.beginPath();x.ellipse(PX,G-ry+gs.y,rx,ry,0,0,Math.PI*2);x.fillStyle=COL.y;x.fill()}
+  if(dying)drawBoing(performance.now());else if(!out){x.beginPath();x.ellipse(PX,G-ry+gs.y,rx,ry,0,0,Math.PI*2);x.fillStyle=COL.y;x.fill()}
   const hudA=gs.msg&&!out?.2:1;x.globalAlpha=hudA;x.fillStyle=COL.ink;x.textAlign='right';x.font='700 15px system-ui,sans-serif';
   x.fillText(Math.floor(gs.score)+'',W-20,30);x.font='500 11px system-ui,sans-serif';x.globalAlpha=.6;
   x.globalAlpha=.6*hudA;x.fillText('NIVEL '+gs.lv+'   RÉCORD '+hi,W-20,48);x.globalAlpha=1;x.textAlign='center';
