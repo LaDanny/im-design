@@ -524,9 +524,9 @@ function spawn(){
   if(Lv>=3&&r<Math.min(.15+Lv*.04,.45)){mk(0,true);mk(60+Math.random()*25,false)}
   else if(Lv>=5&&r>.85){mk(0,false);mk(30,false);mk(60,false)}
   else if(Lv>=5&&r>.62){                                   // trampoline + a figure too tall to jump
-    const x0=W+20;gs.tr.push({x:x0,w:72,hit:0});
-    gs.obs.push({x:x0+76+gs.spd*17,w:28,h:162,c:COL.b,tall:true});
-    gs.next=Math.max(gs.next,(76+gs.spd*17+60)/gs.spd+70);return}
+    const x0=W+20;gs.tr.push({x:x0,w:110,hit:0});
+    gs.obs.push({x:x0+114+gs.spd*17,w:28,h:162,c:COL.b,tall:true});
+    gs.next=Math.max(gs.next,(114+gs.spd*17+60)/gs.spd+70);return}
   else mk(0,Math.random()<.55);
   gs.next=Math.max(28-Lv,(65+Math.random()*55)-gs.spd*2.4-Lv*3);
 }
@@ -535,10 +535,10 @@ function gstep(){
   gs.t++;gs.score+=gs.spd/60;
   const nl=1+Math.floor(gs.score/100);if(nl>gs.lv){gs.lv=nl;showMsg(nl)}if(gs.lv>maxLv){maxLv=gs.lv;Hist.set('immaxlv',maxLv)}
   gs.spd=Math.min(16,5+gs.lv*1+gs.t/2000);
-  gs.vy+=(held&&gs.vy<0)?.45:.85;gs.y+=gs.vy;
-  if(gs.y>=0&&!gs.ground){const tp=gs.tr.find(t=>PX>=t.x-6&&PX<=t.x+t.w+6);
-    if(tp){gs.y=-1;gs.vy=-19;gs.sq=.35;tp.hit=performance.now();Snd.sfx('jump');}}
-  if(gs.y>=0){if(!gs.ground)gs.sq=.3;gs.y=0;gs.vy=0;gs.ground=true}
+  gs.vy+=(held&&gs.vy<0&&!gs.boost)?.45:.85;gs.y+=gs.vy;
+  if(gs.y>=0&&!gs.ground){const tp=gs.tr.find(t=>PX>=t.x-12&&PX<=t.x+t.w+12);
+    if(tp){gs.y=-1;gs.vy=-19;gs.boost=true;gs.sq=.35;tp.hit=performance.now();Snd.sfx('jump');}}
+  if(gs.y>=0){gs.boost=false;if(!gs.ground)gs.sq=.3;gs.y=0;gs.vy=0;gs.ground=true}
   if(--gs.next<=0)spawn();
   gs.obs.forEach(o=>o.x-=gs.spd);gs.tr.forEach(t=>t.x-=gs.spd);gs.tr=gs.tr.filter(t=>t.x+t.w>-10);gs.obs=gs.obs.filter(o=>o.x+o.w>-10);
   const cx=PX,cy=G-BR+gs.y;
