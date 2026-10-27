@@ -215,8 +215,39 @@ const x=cv.getContext('2d');x.scale(2,2);
 const W=824,G=197,PX=106.5,BR=20,COL={ink:'#161615',y:'#F8A829',b:'#013BF6',r:'#F83E1F'};
 let hi=0;try{hi=+localStorage.getItem('imjump')||0}catch(e){}
 let gs,held=false;
-function newGame(play){gs={mode:play?'play':'ready',t:0,y:0,vy:0,sq:0,obs:[],spd:5.5,next:50,score:0,ground:true,lv:1,flash:0}}
-function jump(){if(mode!=='game'||gs.mode!=='play')return;if(gs.ground){gs.vy=-11.5;gs.ground=false;gs.sq=-.25}}
+// ---------- level messages: PLAY. EXPLORE. REPEAT. ----------
+// One entry per level. "anim" names the animation in MSG_ANIMS, so each message
+// can get its own micro-animation later without touching the game loop.
+const LEVEL_MSGS={1:{text:'JUST PLAY.',anim:'base',pause:false,dur:1200},
+ 2:{text:'STAY CURIOUS.',anim:'base'},3:{text:'ASK WHY.',anim:'base'},4:{text:'WHAT IF...?',anim:'base'},
+ 5:{text:'BREAK PATTERNS.',anim:'base'},6:{text:'EMBRACE CHAOS.',anim:'base'},7:{text:'CONNECT THE DOTS.',anim:'base'},
+ 8:{text:'MAKE SOMETHING NEW.',anim:'base'},9:{text:'KEEP EVOLVING.',anim:'base'},10:{text:'NEVER STOP PLAYING.',anim:'base'}};
+const MSG_DUR=1500, RM=matchMedia('(prefers-reduced-motion: reduce)');
+function showMsg(lv){
+  const m=LEVEL_MSGS[lv]; if(!m||gs.shown[lv]||gs.msg)return;   // levels 11+: nothing; once per level; never stacked
+  gs.shown[lv]=true; gs.msg={...m,t0:performance.now(),dur:m.dur||MSG_DUR,pause:m.pause!==false};
+}
+function msgPausing(){
+  if(!gs.msg)return false;
+  if(performance.now()-gs.msg.t0>=gs.msg.dur){gs.msg=null;held=false;return false}  // auto resume
+  return gs.msg.pause;
+}
+// shared phases: in (opacity + rise), hold, out (opacity + rise)
+function msgPhase(p){const i=.2,o=.2;if(p<i)return{a:E.io(p/i),dy:L(14,0,E.io(p/i))};if(p>1-o){const k=E.io((p-(1-o))/o);return{a:1-k,dy:L(0,-14,k)}}return{a:1,dy:0}}
+const MSG_ANIMS={
+  base(ctx,m,p){const f=msgPhase(p);ctx.globalAlpha=f.a;
+    let fs=64;ctx.font=`700 ${fs}px "Inter Tight","Helvetica Neue",Arial,sans-serif`;
+    const w=ctx.measureText(m.text).width;if(w>W-120){fs=fs*(W-120)/w;ctx.font=`700 ${fs}px "Inter Tight","Helvetica Neue",Arial,sans-serif`}
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=COL.ink;
+    ctx.fillText(m.text,W/2,G/2+10+(RM.matches?0:f.dy));ctx.globalAlpha=1;ctx.textBaseline='alphabetic'}
+};
+function drawMsg(now){
+  if(!gs.msg)return;const p=Math.min(1,(now-gs.msg.t0)/gs.msg.dur);
+  if(p>=1){if(!gs.msg.pause)gs.msg=null;return}
+  (MSG_ANIMS[gs.msg.anim]||MSG_ANIMS.base)(x,gs.msg,p);
+}
+function newGame(play){gs={mode:play?'play':'ready',t:0,y:0,vy:0,sq:0,obs:[],spd:5.5,next:50,score:0,ground:true,lv:1,msg:null,shown:{}};if(play)showMsg(1)}
+function jump(){if(mode!=='game'||gs.mode!=='play'||msgPausing())return;if(gs.ground){gs.vy=-11.5;gs.ground=false;gs.sq=-.25}}
 document.addEventListener('pointerdown',e=>{if(mode!=='game'||e.target.closest('.foot,#over'))return;e.preventDefault();held=true;if(gs.mode==='over'){over.hidden=true;newGame(true)}else jump()});
 addEventListener('pointerup',()=>held=false);
 addEventListener('keydown',e=>{if(mode==='game'&&(e.code==='Space'||e.code==='ArrowUp')){e.preventDefault();if(!e.repeat){held=true;if(gs.mode==='over'){over.hidden=true;newGame(true)}else jump()}}});
@@ -230,9 +261,9 @@ function spawn(){
   gs.next=Math.max(28-Lv,(65+Math.random()*55)-gs.spd*2.4-Lv*3);
 }
 function gstep(){
-  if(gs.mode!=='play')return;
+  if(gs.mode!=='play'||msgPausing())return;
   gs.t++;gs.score+=gs.spd/60;
-  const nl=1+Math.floor(gs.score/100);if(nl>gs.lv){gs.lv=nl;gs.flash=90}
+  const nl=1+Math.floor(gs.score/100);if(nl>gs.lv){gs.lv=nl;showMsg(nl)}
   gs.spd=Math.min(16,5+gs.lv*1+gs.t/2000);
   gs.vy+=(held&&gs.vy<0)?.45:.85;gs.y+=gs.vy;
   if(gs.y>=0){if(!gs.ground)gs.sq=.3;gs.y=0;gs.vy=0;gs.ground=true}
@@ -241,7 +272,6 @@ function gstep(){
   const cx=PX,cy=G-BR+gs.y;
   for(const o of gs.obs){const nx=Math.max(o.x,Math.min(cx,o.x+o.w)),ny=Math.max(G-o.h,Math.min(cy,G));
     if((cx-nx)**2+(cy-ny)**2<(BR-3)**2){gs.mode='over';over.hidden=false;if(gs.score>hi){hi=Math.floor(gs.score);try{localStorage.setItem('imjump',hi)}catch(e){}}}}
-  if(gs.flash>0)gs.flash--;
 }
 function gdraw(){
   x.clearRect(0,0,W,247);
@@ -251,9 +281,10 @@ function gdraw(){
   gs.sq*=.82;const rx=BR*(1+gs.sq),ry=BR*(1-gs.sq);
   x.beginPath();x.ellipse(PX,G-ry+gs.y,rx,ry,0,0,Math.PI*2);
   if(out){x.strokeStyle=COL.y;x.lineWidth=2;x.stroke()}else{x.fillStyle=COL.y;x.fill()}
-  x.fillStyle=COL.ink;x.textAlign='right';x.font='700 15px system-ui,sans-serif';
+  const hudA=gs.msg&&!out?.2:1;x.globalAlpha=hudA;x.fillStyle=COL.ink;x.textAlign='right';x.font='700 15px system-ui,sans-serif';
   x.fillText(Math.floor(gs.score)+'',W-20,30);x.font='500 11px system-ui,sans-serif';x.globalAlpha=.6;
-  x.fillText('NIVEL '+gs.lv+'   RÉCORD '+hi,W-20,48);x.globalAlpha=1;x.textAlign='center';
+  x.globalAlpha=.6*hudA;x.fillText('NIVEL '+gs.lv+'   RÉCORD '+hi,W-20,48);x.globalAlpha=1;x.textAlign='center';
+  if(!out)drawMsg(performance.now());
   if(gs.flash>0&&!out){x.globalAlpha=Math.min(1,gs.flash/30);x.font='800 40px system-ui,sans-serif';x.fillText('Nivel '+gs.lv,W/2,100);x.globalAlpha=1}
   if(out){x.font='800 34px system-ui,sans-serif';x.fillText('Fin del juego',W/2,90);x.font='500 15px system-ui,sans-serif';x.fillText(Math.floor(gs.score)+' puntos',W/2,118)}
 }
