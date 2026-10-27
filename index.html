@@ -41,6 +41,9 @@ svg.nohover .shape{fill-opacity:1!important;stroke-opacity:0!important}
 svg.nohover #txo{opacity:0!important}
 svg.nohover #play{transform:scale(0)}
 [hidden]{display:none!important}
+.stage,.stage *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+html.playing,html.playing body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none}
+#game{touch-action:none}
 #jump text{font:700 95px "Inter Tight","Helvetica Neue",Arial,sans-serif;letter-spacing:-3px;fill:#161615;pointer-events:none}
 .foot{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px max(24px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));border-top:1px solid #161615;background:#F4F4F2;font:600 14px "Inter Tight","Helvetica Neue",Arial,sans-serif;color:#161615;letter-spacing:-.01em}
 .foot-r{display:flex;align-items:center;gap:20px}
@@ -174,6 +177,7 @@ const BK=[35,41,143,156],BL=[191.65,41,143,156],RD=[348,41,71.5,156],CY=117.7,CX
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let t0;
 function frame(now){
+ if(typeof mode!=='undefined'&&mode==='game'){requestAnimationFrame(frame);return}
  const t=reduce?99999:now-t0;
  // 1. dot appears in place: grows from nothing with a soft wobble
  const g=p(t,0,900,E.el);
@@ -294,11 +298,11 @@ function toGameFrame(now){
   ['line','t1','t2','txo'].forEach(id=>$(id).style.opacity=1-e2);
   const r=L(R,20,e), d=$('dot');
   d.setAttribute('cy',L(CY,177,e)-Math.sin(k*Math.PI)*70);d.setAttribute('rx',r);d.setAttribute('ry',r);
-  if(k>=1){mode='game';logo.style.visibility='hidden';cv.hidden=false;newGame(true);cv.focus&&cv.focus()}
+  if(k>=1){document.documentElement.classList.add('playing');mode='game';logo.style.visibility='hidden';cv.hidden=false;newGame(true);cv.focus&&cv.focus()}
 }
 function backToLogo(){
   Snd.stop();
-  mode='logo';hideOver();cv.hidden=true;logo.style.visibility='';logo.classList.remove('nohover');
+  document.documentElement.classList.remove('playing');mode='logo';hideOver();cv.hidden=true;logo.style.visibility='';logo.classList.remove('nohover');
   ['line','t1','t2','txo'].forEach(id=>$(id).style.opacity='');start();
 }
 $('back').addEventListener('click',backToLogo);
@@ -414,6 +418,8 @@ function newGame(play,word){gs={mode:play?'play':'ready',t:0,y:0,vy:0,sq:0,obs:[
   if(!word&&!firstPlayShown){word='PLAY.';firstPlayShown=true}
   if(word){gs.shown[1]=false;showWord(word,700,()=>showMsg(1))}else showMsg(1)}
 function jump(){if(mode!=='game'||gs.mode!=='play'||msgPausing())return;if(gs.ground){Snd.sfx('jump');gs.vy=-11.5;gs.ground=false;gs.sq=-.25}}
+document.addEventListener('contextmenu',e=>{if(mode==='game')e.preventDefault()});
+document.addEventListener('selectstart',e=>{if(mode==='game')e.preventDefault()});
 document.addEventListener('pointerdown',e=>{if(mode!=='game'||e.target.closest('.foot,#over'))return;e.preventDefault();held=true;if(gs.mode==='over'){if(gs.canRestart)restartGame()}else jump()});
 addEventListener('pointerup',()=>held=false);
 addEventListener('keydown',e=>{if(mode==='game'&&e.code==='Enter'&&gs.mode==='over'&&gs.canRestart&&document.activeElement.tagName!=='BUTTON'){e.preventDefault();restartGame();return}
@@ -456,7 +462,10 @@ function gdraw(){
   if(!out&&!dying)drawMsg(performance.now());
 }
 newGame(false);
-(function gloop(){if(mode==='game'){gstep();gdraw()}requestAnimationFrame(gloop)})();
+let gAcc=0,gLast=performance.now();const STEP=1000/60;
+(function gloop(now){now=now||performance.now();
+  if(mode==='game'){gAcc+=Math.min(250,now-gLast);let n=0;while(gAcc>=STEP&&n<8){gstep();gAcc-=STEP;n++}if(n===8)gAcc=0;gdraw()}else gAcc=0;
+  gLast=now;requestAnimationFrame(gloop)})();
 
 </script>
 
