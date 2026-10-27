@@ -420,7 +420,7 @@ function newGame(play,word){gs={mode:play?'play':'ready',t:0,y:0,vy:0,sq:0,obs:[
 function jump(){if(mode!=='game'||gs.mode!=='play'||msgPausing())return;if(gs.ground){Snd.sfx('jump');gs.vy=-11.5;gs.ground=false;gs.sq=-.25}}
 document.addEventListener('contextmenu',e=>{if(mode==='game')e.preventDefault()});
 document.addEventListener('selectstart',e=>{if(mode==='game')e.preventDefault()});
-document.addEventListener('pointerdown',e=>{if(mode!=='game'||e.target.closest('.foot,#over'))return;e.preventDefault();held=true;if(gs.mode==='over'){if(gs.canRestart)restartGame()}else jump()});
+document.addEventListener('pointerdown',e=>{if(mode!=='game'||e.target.closest('.foot,#over'))return;e.preventDefault();held=true;if(gs.mode==='play')jump()});
 addEventListener('pointerup',()=>held=false);
 addEventListener('keydown',e=>{if(mode==='game'&&e.code==='Enter'&&gs.mode==='over'&&gs.canRestart&&document.activeElement.tagName!=='BUTTON'){e.preventDefault();restartGame();return}
   if(mode==='game'&&(e.code==='Space'||e.code==='ArrowUp')){e.preventDefault();if(!e.repeat){held=true;if(gs.mode==='over'){if(gs.canRestart)restartGame()}else jump()}}});
