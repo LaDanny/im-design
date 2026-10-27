@@ -516,8 +516,8 @@ function spawn(){
   else if(Lv>=5&&r>.85){mk(0,false);mk(30,false);mk(60,false)}
   else if(Lv>=5&&r>.62){                                   // trampoline + a figure too tall to jump
     const x0=W+20;gs.tr.push({x:x0,w:72,hit:0});
-    gs.obs.push({x:x0+55+gs.spd*16,w:28,h:162,c:COL.b,tall:true});
-    gs.next=Math.max(gs.next,(55+gs.spd*16+60)/gs.spd+70);return}
+    gs.obs.push({x:x0+76+gs.spd*17,w:28,h:162,c:COL.b,tall:true});
+    gs.next=Math.max(gs.next,(76+gs.spd*17+60)/gs.spd+70);return}
   else mk(0,Math.random()<.55);
   gs.next=Math.max(28-Lv,(65+Math.random()*55)-gs.spd*2.4-Lv*3);
 }
