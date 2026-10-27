@@ -27,6 +27,7 @@ svg.outlined .txf{fill-opacity:0}
 svg.outlined #txo{opacity:1}
 
 html.playing,html.playing body{touch-action:manipulation}
+body{padding-bottom:72px!important}
 .stage{position:relative;width:min(824px,100%)}
 .stage svg{width:100%}
 #game{position:absolute;inset:0;width:100%;height:100%;touch-action:manipulation;cursor:pointer}
@@ -224,7 +225,7 @@ const LEVEL_MSGS={1:{text:'JUST PLAY.',anim:'base',pause:false,dur:1200},
  8:{text:'MAKE SOMETHING NEW.',anim:'base'},9:{text:'KEEP EVOLVING.',anim:'base'},10:{text:'NEVER STOP PLAYING.',anim:'base'}};
 const MSG_DUR=1500, RM=matchMedia('(prefers-reduced-motion: reduce)');
 function showMsg(lv){
-  const m=LEVEL_MSGS[lv]; if(!m||gs.shown[lv]||gs.msg)return;   // levels 11+: nothing; once per level; never stacked
+  const m=LEVEL_MSGS[lv]; if(!m||gs.shown[lv])return; if(gs.msg&&gs.msg.pause)return; // a non-pausing intro can be replaced   // levels 11+: nothing; once per level; never stacked
   gs.shown[lv]=true; gs.msg={...m,t0:performance.now(),dur:m.dur||MSG_DUR,pause:m.pause!==false};
 }
 function msgPausing(){
