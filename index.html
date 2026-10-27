@@ -412,6 +412,31 @@ function drawOrbit(cx,cy,k){
   else{arc(0,Math.PI*2);for(let i=0;i<4;i++){const t=i*Math.PI/2;x.beginPath();x.moveTo(Math.cos(t)*(r+3),Math.sin(t)*(r+3));x.lineTo(Math.cos(t)*(r+7),Math.sin(t)*(r+7));x.stroke()}} // CLUB
   x.restore();
 }
+// ---------- phrase pools: shuffled bags, no repeats until a pool runs out ----------
+const PHRASES={
+ // start of a game (level 1)
+ go:["JUST PLAY.","HERE WE GO.","START ANYWHERE.","LET'S SEE.","OPEN MIND.","NO RULES YET.","JUST BEGIN.","EASY DOES IT.","TRY SOMETHING.","FIRST STEP.",
+     "HELLO, CURIOSITY.","WARM UP.","TRUST THE PROCESS.","BLANK CANVAS.","WHY NOT?","GO GENTLY.","PRESS PLAY.","BEGIN AGAIN.","FRESH START.","SEE WHAT HAPPENS."],
+ // level 2 to 10
+ level:["STAY CURIOUS.","ASK WHY.","WHAT IF...?","BREAK PATTERNS.","EMBRACE CHAOS.","CONNECT THE DOTS.","MAKE SOMETHING NEW.","KEEP EVOLVING.","NEVER STOP PLAYING.",
+     "THINK SIDEWAYS.","LOOK CLOSER.","QUESTION EVERYTHING.","SKETCH IT OUT.","FAIL FORWARD.","ITERATE.","PROTOTYPE IT.","MAKE IT SIMPLER.","LESS, BUT BETTER.",
+     "FORM FOLLOWS FUN.","TRUST YOUR GUT.","STAY WEIRD.","BE BOLD.","FIND THE GAP.","SHAPE THE IDEA.","ZOOM OUT.","ZOOM IN.","CHANGE ANGLES.",
+     "LOVE WHITE SPACE.","KEEP IT HUMAN.","MAKE IT MATTER.","DESIGN IS A VERB.","DOUBT THE DEFAULT.","PLAY SERIOUSLY.","RULES ARE DRAFTS.","TRY THE OPPOSITE.",
+     "FOLLOW THE SPARK.","KILL YOUR DARLINGS.","SHIP IT.","SIMPLIFY.","NOTICE MORE.","MIX IT UP.","BEND THE GRID.","CHASE THE ODD.","MAKE MISTAKES.",
+     "GET UNSTUCK.","BUT WHAT IF...?","SAY YES. THEN HOW.","LISTEN FIRST.","EDIT RUTHLESSLY.","START UGLY.","REFINE LATER.","KEEP MOVING.","DARE TO DIFFER.",
+     "FIND YOUR RHYTHM.","EMBRACE THE GLITCH.","PATTERNS ARE CLUES.","EVERYTHING IS A DRAFT.","CURIOSITY WINS.","TINKER MORE.","SURPRISE YOURSELF.",
+     "ONE MORE IDEA.","THINK IN SHAPES.","MAKE ROOM FOR MAGIC.","SEE DIFFERENTLY.","PLAY WITH LIMITS.","STAY UNFINISHED.","LEAVE A MARK.","OBSERVE. THEN ACT.",
+     "TURN IT AROUND.","WONDER MORE.","GO ONE STEP FURTHER.","ALIGN. THEN BREAK IT.","KEEP IT SIMPLE.","MAKE IT YOURS.","COLOR OUTSIDE.","IDEAS NEED AIR."],
+ // at the collision
+ fail:["FAIL.","BOING.","WHOOPS.","NOT YET.","PLOT TWIST.","BONK.","ALMOST.","UNEXPECTED.","INTERESTING.","OH.","DETOUR.","HMM."],
+ // results, when there is no new record
+ cheer:["EVERY TRY COUNTS.","THAT'S DATA.","PROGRESS IS SNEAKY.","GOOD EXPERIMENT.","NOTED. NEXT.","A USEFUL MISTAKE.","NOW YOU KNOW.","THE PROCESS IS WORKING.",
+     "PRACTICE IN DISGUISE.","YOU LEARNED SOMETHING.","KEEP THE SPARK.","FAIL BETTER.","THAT COUNTS TOO.","SAME SPIRIT. NEW TRY.","EVERY DRAFT HELPS.","WORTH THE TRY."]};
+const BAGS={};
+function pick(pool){const b=BAGS[pool]||(BAGS[pool]={q:[],last:null});
+  if(!b.q.length){b.q=PHRASES[pool].slice();for(let i=b.q.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b.q[i],b.q[j]]=[b.q[j],b.q[i]]}
+    if(b.q[b.q.length-1]===b.last)b.q.unshift(b.q.pop())}           // no repeat across refills
+  return b.last=b.q.pop()}
 const LEVEL_MSGS={1:{text:'JUST PLAY.',anim:'base',pause:false,dur:1200},
  2:{text:'STAY CURIOUS.',anim:'base'},3:{text:'ASK WHY.',anim:'base'},4:{text:'WHAT IF...?',anim:'base'},
  5:{text:'BREAK PATTERNS.',anim:'base'},6:{text:'EMBRACE CHAOS.',anim:'base'},7:{text:'CONNECT THE DOTS.',anim:'base'},
@@ -421,7 +446,7 @@ function showWord(text,dur,next){gs.msg={text,anim:'base',pause:false,t0:perform
 function endMsg(){const n=gs.msg&&gs.msg.next;gs.msg=null;if(n)n()}
 function showMsg(lv){
   const m=LEVEL_MSGS[lv]; if(!m||gs.shown[lv])return; if(gs.msg&&gs.msg.pause)return; // a non-pausing intro can be replaced   // levels 11+: nothing; once per level; never stacked
-  gs.shown[lv]=true; gs.msg={...m,t0:performance.now(),dur:m.dur||MSG_DUR,pause:m.pause!==false};
+  gs.shown[lv]=true; gs.msg={...m,text:pick(lv===1?'go':'level'),t0:performance.now(),dur:m.dur||MSG_DUR,pause:m.pause!==false};
   if(gs.msg.pause){Snd.level(lv);Snd.sfx('level');Snd.duck(.45);setTimeout(()=>Snd.duck(.9),gs.msg.dur)}
   if(gs.msg.pause&&gs.obs.length){const t=performance.now();gs.obs.forEach(o=>o.clear=t)}
   if(gs.msg.pause)gs.tr=[];
@@ -458,7 +483,7 @@ function startDie(cx,cy,nx,ny){
 // BOING: squash into the hit, bounce back with a stretch, settle with a small wobble. The ball survives.
 function drawBoing(now){
   const D=gs.die, rm=RM.matches, T=rm?150:DIE_MS, t=Math.min(1,(now-D.t0)/T), ms=t*T;
-  {const fp=Math.min(1,(now-D.t0)/DIE_MS);MSG_ANIMS.base(x,{text:'FAIL.'},rm?.5:Math.min(.79,fp*1.1));}
+  {const fp=Math.min(1,(now-D.t0)/DIE_MS);MSG_ANIMS.base(x,{text:D.word||(D.word=pick('fail'))},rm?.5:Math.min(.79,fp*1.1));}
   let off=0,lift=0,sa=1,sp=1,tilt=0;                  // sa: scale along impact axis, sp: perpendicular
   if(!rm){
     if(ms<90){const k=E.io(ms/90);sa=1-.18*k;sp=1+.1*k}                                   // squash into the obstacle
@@ -494,7 +519,7 @@ function flyBall(){
 function showOver(){
   const sc=Math.floor(gs.score);
   $('goTry').textContent=String(gs.attempt||attempts).padStart(2,'0');$('goLv').textContent=gs.lv;
-  let note='EVERY TRY COUNTS.';
+  let note=pick('cheer');
   if(gs.bestAt>0&&sc>gs.bestAt)note='NEW PERSONAL BEST.';
   else if(gs.maxAt>0&&gs.lv>gs.maxAt)note=(gs.lv-gs.maxAt===1)?'ONE LEVEL FURTHER.':'NEW LEVEL REACHED.';
   $('goNote').textContent=note;
