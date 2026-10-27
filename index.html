@@ -43,6 +43,11 @@ svg.nohover #play{transform:scale(0)}
 [hidden]{display:none!important}
 #jump text{font:700 95px "Inter Tight","Helvetica Neue",Arial,sans-serif;letter-spacing:-3px;fill:#161615;pointer-events:none}
 .foot{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px max(24px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));border-top:1px solid #161615;background:#F4F4F2;font:600 14px "Inter Tight","Helvetica Neue",Arial,sans-serif;color:#161615;letter-spacing:-.01em}
+.foot-r{display:flex;align-items:center;gap:20px}
+#snd{background:none;border:0;padding:4px;color:#161615;cursor:pointer;display:inline-flex}
+#snd svg{width:14px!important;height:14px!important}
+#snd .x{display:none}#snd[aria-pressed=false] .x{display:inline}#snd[aria-pressed=false] .w{display:none}
+#snd:focus-visible{outline:2px solid #013BF6;outline-offset:3px}
 .foot a{color:#161615;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
 @media (hover:hover){.foot a:hover{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}}
 .foot a:focus-visible{outline:2px solid #013BF6;outline-offset:3px}
@@ -142,6 +147,7 @@ svg.nohover #jump text{opacity:0!important}
 <div class="go-act"><button id="retry" type="button">PLAY AGAIN <svg aria-hidden="true" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M2 9L9 2M3.5 2H9V7.5"/></svg></button><button id="back" type="button">BACK TO LOGO</button></div></div>
 </div></div>
 </div>
+<footer class="foot"><span>I’m Danny Del Castillo</span><span class="foot-r"><button id="snd" type="button" aria-pressed="true" aria-label="Sonido"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 5h2.5L8 2v10L4.5 9H2z"/><path class="w" d="M10 4.5c1 1.4 1 3.6 0 5M11.8 3c1.8 2.2 1.8 5.8 0 8"/><path class="x" d="M10 5l3 4M13 5l-3 4"/></svg></button><a id="li" href="https://www.linkedin.com/in/ladanny/" target="_blank" rel="noopener">LinkedIn <svg aria-hidden="true" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M2 9L9 2M3.5 2H9V7.5"/></svg></a></span></footer>
 <script>
 const $=id=>document.getElementById(id);
 const cl=v=>Math.min(1,Math.max(0,v)), L=(a,b,t)=>a+(b-a)*t;
@@ -206,13 +212,64 @@ function hoverFrame(now){
     t.style.visibility=hp>1?'visible':'hidden';
   });
 }
+// ---------- sound: original ambient score, generated live (Web Audio) ----------
+const Snd=(()=>{
+  let ac,master,music,bus,verb,dly,on=true,started=false,timer=null,step=0,level=1,nextT=0;
+  try{on=localStorage.getItem('imsound')!=='off'}catch(e){}
+  const A=[220,261.63,293.66,329.63,392,440,523.25,587.33,659.25,783.99]; // A minor pentatonic
+  const CH=[[110,164.81,261.63,329.63,392],[87.31,130.81,220,261.63,329.63],[130.81,196,246.94,329.63,392],[98,146.83,246.94,293.66,440]]; // Am9 Fmaj7 Cmaj7 G6
+  function impulse(sec){const n=ac.sampleRate*sec,b=ac.createBuffer(2,n,ac.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2.6)}return b}
+  function init(){
+    ac=new (window.AudioContext||window.webkitAudioContext)();
+    master=ac.createGain();master.gain.value=on?1:0;master.connect(ac.destination);
+    music=ac.createGain();music.gain.value=0;music.connect(master);
+    bus=ac.createBiquadFilter();bus.type='lowpass';bus.frequency.value=2600;bus.connect(music);
+    verb=ac.createConvolver();verb.buffer=impulse(4.5);const vg=ac.createGain();vg.gain.value=.55;verb.connect(vg);vg.connect(music);
+    dly=ac.createDelay(2);dly.delayTime.value=.42;const fb=ac.createGain();fb.gain.value=.38;const df=ac.createBiquadFilter();df.type='lowpass';df.frequency.value=1800;
+    dly.connect(df);df.connect(fb);fb.connect(dly);df.connect(music);df.connect(verb);
+  }
+  function voice(f,t,dur,{type='sine',vol=.05,att=.01,rel=1,dest=bus,send=.4,echo=0,det=0}={}){
+    const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;o.detune.value=det;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+att);g.gain.setValueAtTime(vol,t+Math.max(att,dur-rel));g.gain.linearRampToValueAtTime(0,t+dur);
+    o.connect(g);g.connect(dest);if(send){const s=ac.createGain();s.gain.value=send;g.connect(s);s.connect(verb)}
+    if(echo){const e=ac.createGain();e.gain.value=echo;g.connect(e);e.connect(dly)}
+    o.start(t);o.stop(t+dur+.05);
+  }
+  function pad(ch,t){ch.forEach((f,i)=>{[-6,6].forEach(d=>voice(f,t,8.6,{type:i<1?'sine':'triangle',vol:i<1?.035:.012,att:2.4,rel:3,send:.7,det:d}))})}
+  function tick(){ // look-ahead scheduler, 1 step = 0.5 s, 16 steps per chord
+    while(nextT<ac.currentTime+.6){
+      const t=nextT,s=step%16,ch=CH[Math.floor(step/16)%4];
+      if(s===0)pad(ch,t);
+      if(Math.random()<(.28+level*.03)){const f=A[Math.floor(Math.random()*(level>=5?10:7))];voice(f*(level>=7&&Math.random()<.3?2:1),t,1.6,{type:'triangle',vol:.045,att:.005,rel:1.5,send:.6,echo:.5})}
+      if(level>=3&&s%4===0)voice(ch[0]/2,t,1.9,{type:'sine',vol:.07,att:.04,rel:1.6,send:.1});            // low pulse
+      if(level>=5&&s%2===1)voice(ch[2+(s>>1)%3]*2,t,.35,{type:'sine',vol:.016,att:.005,rel:.3,send:.3,echo:.6}); // arpeggio glints
+      if(level>=7&&s%4===2)voice(5200,t,.05,{type:'square',vol:.004,att:.001,rel:.04,send:.2});              // soft tick
+      nextT+=.5;step++;
+    }
+  }
+  return{
+    start(){ if(!ac)init(); ac.resume&&ac.resume(); if(started)return; started=true;step=0;nextT=ac.currentTime+.1;
+      music.gain.cancelScheduledValues(ac.currentTime);music.gain.setTargetAtTime(.9,ac.currentTime,1.2);timer=setInterval(tick,150);tick()},
+    stop(){ if(!ac||!started)return; started=false;music.gain.setTargetAtTime(0,ac.currentTime,.5);clearInterval(timer);timer=null},
+    level(l){level=l},
+    duck(v){if(ac&&started)music.gain.setTargetAtTime(v,ac.currentTime,.25)},
+    sfx(kind){ if(!ac||!on)return;const t=ac.currentTime;
+      if(kind==='jump')voice(523.25,t,.16,{type:'sine',vol:.05,att:.004,rel:.14,dest:master,send:.15});
+      if(kind==='level'){[659.25,987.77].forEach((f,i)=>voice(f,t+i*.11,1.4,{type:'sine',vol:.05,att:.005,rel:1.3,dest:master,send:.7,echo:.4}))}
+      if(kind==='oops'){[392,329.63,246.94].forEach((f,i)=>voice(f,t+i*.09,.7,{type:'triangle',vol:.06,att:.004,rel:.6,dest:master,send:.5}))}
+    },
+    toggle(){on=!on;try{localStorage.setItem('imsound',on?'on':'off')}catch(e){}if(ac)master.gain.setTargetAtTime(on?1:0,ac.currentTime,.08);return on},
+    get on(){return on}
+  };
+})();
+const sndBtn=$('snd');const syncSnd=()=>{sndBtn.setAttribute('aria-pressed',Snd.on);sndBtn.setAttribute('aria-label',Snd.on?'Silenciar':'Activar sonido')};syncSnd();sndBtn.addEventListener('click',()=>{Snd.toggle();syncSnd()});
 // ---------- portal: logo -> game ----------
 let mode='logo', tg0=0;
 const logo=$('logo'), cv=$('game'), over=$('over'), dotEl=$('dot');
 function introDone(){return performance.now()-t0>3700}
 dotEl.addEventListener('pointerenter',()=>{if(mode==='logo'&&introDone())logo.classList.add('canplay')});
 dotEl.addEventListener('pointerleave',()=>logo.classList.remove('canplay'));
-dotEl.addEventListener('click',()=>{if(mode==='logo'&&introDone()){mode='toGame';tg0=performance.now();logo.classList.remove('outlined');logo.classList.remove('canplay');logo.classList.add('nohover')}});
+dotEl.addEventListener('click',()=>{if(mode==='logo'&&introDone()){mode='toGame';tg0=performance.now();Snd.start();logo.classList.remove('outlined');logo.classList.remove('canplay');logo.classList.add('nohover')}});
 
 // outline toggle: mouse = hover, touch = each tap flips it
 logo.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')logo.classList.add('outlined')});
@@ -231,6 +288,7 @@ function toGameFrame(now){
   if(k>=1){mode='game';logo.style.visibility='hidden';cv.hidden=false;newGame(true);cv.focus&&cv.focus()}
 }
 function backToLogo(){
+  Snd.stop();
   mode='logo';hideOver();cv.hidden=true;logo.style.visibility='';logo.classList.remove('nohover');
   ['line','t1','t2','txo'].forEach(id=>$(id).style.opacity='');start();
 }
@@ -253,6 +311,7 @@ const MSG_DUR=1500, RM=matchMedia('(prefers-reduced-motion: reduce)');
 function showMsg(lv){
   const m=LEVEL_MSGS[lv]; if(!m||gs.shown[lv])return; if(gs.msg&&gs.msg.pause)return; // a non-pausing intro can be replaced   // levels 11+: nothing; once per level; never stacked
   gs.shown[lv]=true; gs.msg={...m,t0:performance.now(),dur:m.dur||MSG_DUR,pause:m.pause!==false};
+  if(gs.msg.pause){Snd.level(lv);Snd.sfx('level');Snd.duck(.45);setTimeout(()=>Snd.duck(.9),gs.msg.dur)}
   if(gs.msg.pause&&gs.obs.length){const t=performance.now();gs.obs.forEach(o=>o.clear=t)}
 }
 function msgPausing(){
@@ -281,7 +340,7 @@ const DIE_MS=650; let goTimers=[];
 const FRAGS=[{d:1.0,r:.45,g:2},{d:.65,r:-.3,g:-4},{d:1.25,r:.22,g:6},{d:.85,r:-.55,g:10}];
 function startDie(cx,cy){
   if(gs.mode!=='play')return;                      // exactly once per collision
-  gs.mode='dying';gs.msg=null;held=false;gs.canRestart=false;
+  gs.mode='dying';Snd.sfx('oops');Snd.duck(.35);gs.msg=null;held=false;gs.canRestart=false;
   gs.die={t0:performance.now(),cx,cy,r:BR};
 }
 function drawFrags(now){
@@ -305,9 +364,9 @@ function showOver(){
   goTimers.push(setTimeout(()=>{gs.canRestart=true;if(lastKey)$('retry').focus({preventScroll:true})},300));
 }
 function hideOver(){goTimers.forEach(clearTimeout);goTimers=[];over.hidden=true;over.className=''}
-function restartGame(){hideOver();held=false;newGame(true)}
+function restartGame(){hideOver();held=false;newGame(true);Snd.level(1);Snd.start();Snd.duck(.9)}
 function newGame(play){gs={mode:play?'play':'ready',t:0,y:0,vy:0,sq:0,obs:[],spd:5.5,next:50,score:0,ground:true,lv:1,msg:null,shown:{}};if(play)showMsg(1)}
-function jump(){if(mode!=='game'||gs.mode!=='play'||msgPausing())return;if(gs.ground){gs.vy=-11.5;gs.ground=false;gs.sq=-.25}}
+function jump(){if(mode!=='game'||gs.mode!=='play'||msgPausing())return;if(gs.ground){Snd.sfx('jump');gs.vy=-11.5;gs.ground=false;gs.sq=-.25}}
 document.addEventListener('pointerdown',e=>{if(mode!=='game'||e.target.closest('.foot,#over'))return;e.preventDefault();held=true;if(gs.mode==='over'){if(gs.canRestart)restartGame()}else jump()});
 addEventListener('pointerup',()=>held=false);
 addEventListener('keydown',e=>{if(mode==='game'&&(e.code==='Space'||e.code==='ArrowUp')){e.preventDefault();if(!e.repeat){held=true;if(gs.mode==='over'){if(gs.canRestart)restartGame()}else jump()}}});
@@ -350,6 +409,6 @@ newGame(false);
 
 </script>
 
-<footer class="foot"><span>I’m Danny Del Castillo</span><a id="li" href="https://www.linkedin.com/in/ladanny/" target="_blank" rel="noopener">LinkedIn <svg aria-hidden="true" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M2 9L9 2M3.5 2H9V7.5"/></svg></a></footer>
+
 </body>
 </html>
