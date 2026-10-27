@@ -41,6 +41,20 @@ svg.nohover .shape{fill-opacity:1!important;stroke-opacity:0!important}
 svg.nohover #txo{opacity:0!important}
 svg.nohover #play{transform:scale(0)}
 [hidden]{display:none!important}
+#ul{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);min-height:100%;display:flex;align-items:center;background:#F4F4F2;z-index:4;font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;color:#161615}
+.ul-in{display:grid;grid-template-columns:auto minmax(0,1fr);gap:32px;align-items:center;width:100%}
+#ulMark svg{width:clamp(96px,16vw,140px);height:auto;display:block;overflow:visible}
+.ul-k{margin:0 0 8px;font-weight:700;font-size:12px;letter-spacing:.16em}
+#ulName{margin:0;font-weight:800;font-size:clamp(30px,6.4vw,58px);line-height:.92;letter-spacing:-.045em}
+#ulMsg{margin:12px 0 20px;font-weight:500;font-size:16px;letter-spacing:-.01em}
+#ul .go-act button{font:700 13px "Inter Tight","Helvetica Neue",Arial,sans-serif;letter-spacing:.08em;cursor:pointer;color:#161615;background:none;border:0;white-space:nowrap}
+#ul #ulGo{background:#161615;color:#F4F4F2;padding:12px 16px;display:inline-flex;align-items:center;gap:8px}
+#ul #ulNext{border-bottom:1px solid currentColor;padding:2px 0}
+#ul .go-act button:focus-visible{outline:2px solid #013BF6;outline-offset:3px}
+#ul [data-u]{opacity:0;transform:translateY(8px);transition:opacity .22s,transform .28s cubic-bezier(.2,.9,.2,1)}
+#ul.u1 [data-u="1"],#ul.u2 [data-u="2"],#ul.u3 [data-u="3"]{opacity:1;transform:none}
+@media (max-width:560px){.ul-in{grid-template-columns:1fr;gap:18px}}
+@media (prefers-reduced-motion:reduce){#ul [data-u]{transform:none;transition:opacity .15s}}
 .stage,.stage *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 html.playing,html.playing body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none}
 #game{touch-action:none}
@@ -153,6 +167,11 @@ svg.nohover #jump text{opacity:0!important}
 </svg>
 <canvas id="game" width="1648" height="494" hidden aria-label="Juego: toca o presiona espacio para saltar"></canvas>
 <div id="bx" aria-hidden="true" hidden></div>
+<div id="ul" hidden role="dialog" aria-labelledby="ulName"><div class="ul-in">
+<div id="ulMark"></div>
+<div class="ul-txt"><p class="ul-k" data-u="1">UNLOCKED.</p><h3 id="ulName" data-u="1"></h3><p id="ulMsg" data-u="2"></p>
+<div class="go-act" data-u="3"><button id="ulGo" type="button">TRY AGAIN <svg aria-hidden="true" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M2 9L9 2M3.5 2H9V7.5"/></svg></button><button id="ulNext" type="button">SEE RESULTS</button></div></div>
+</div></div>
 <div id="over" hidden role="dialog" aria-labelledby="oops"><div class="go">
 <div class="go-head"><h2 id="oops" data-s="1" aria-label="OOPS.">OOPS<span class="pt" aria-hidden="true"></span></h2><p class="go-sub" data-s="2" aria-label="Play. Fail. Learn. Repeat."><span>PLAY.</span> <span>FAIL.</span> <span class="now">LEARN.</span> <span>REPEAT.</span></p></div>
 <div class="go-side" data-s="3"><p class="go-note" id="goNote">EVERY TRY COUNTS.</p><dl class="go-stats"><div><dt>SCORE</dt><dd id="goScore">0</dd></div><div><dt>BEST</dt><dd id="goBest">0</dd></div><div><dt>ATTEMPT</dt><dd id="goTry">01</dd></div><div><dt>LEVEL</dt><dd id="goLv">1</dd></div></dl>
@@ -302,11 +321,11 @@ function toGameFrame(now){
 }
 function backToLogo(){
   Snd.stop();
-  document.documentElement.classList.remove('playing');mode='logo';hideOver();cv.hidden=true;logo.style.visibility='';logo.classList.remove('nohover');
+  document.documentElement.classList.remove('playing');mode='logo';hideOver();hideUnlock();cv.hidden=true;logo.style.visibility='';logo.classList.remove('nohover');
   ['line','t1','t2','txo'].forEach(id=>$(id).style.opacity='');start();
 }
 $('back').addEventListener('click',backToLogo);
-$('retry').addEventListener('click',restartGame);
+$('retry').addEventListener('click',restartGame);$('ulGo').addEventListener('click',restartGame);$('ulNext').addEventListener('click',()=>{hideUnlock();gs.canRestart=false;showOver()});
 
 // ---------- game (same coordinates as the logo) ----------
 const x=cv.getContext('2d');x.scale(2,2);
@@ -319,6 +338,70 @@ let gs,held=false;
 // ---------- history: survives reloads (localStorage), separate from the current game ----------
 const Hist={get(k,d=0){try{return +localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 let attempts=Hist.get('imattempts'), maxLv=Hist.get('immaxlv'), firstPlayShown=false;
+// ---------- NEVER GIVE UP CLUB: hidden recognitions for persistence ----------
+// A game counts as a "qualifying attempt" when score >= QUAL_SCORE. At level 1 the score grows ~6 points/s
+// and the first figure reaches the ball after ~3 s, so 20 points means you played ~3.5 s and cleared at least one figure.
+const QUAL_SCORE=20;
+const ACHS=[
+ {id:'curious', at:3, name:'THE CURIOUS ONE',   msg:'Curiosity looks good on you.'},
+ {id:'still',   at:5, name:'STILL HERE',        msg:'We like your attitude.'},
+ {id:'comeback',at:10,name:'THE COMEBACK KID',  msg:'Giving up? Not your style.'},
+ {id:'tryer',   at:20,name:'PROFESSIONAL TRYER',msg:"You've made trying an art."},
+ {id:'built',   at:35,name:'BUILT DIFFERENT',   msg:'Persistence is your superpower.'},
+ {id:'club',    at:50,name:'NEVER GIVE UP CLUB',msg:"You're officially one of us."}];
+let qual=Hist.get('imqual'), unlocked=[];try{unlocked=JSON.parse(localStorage.getItem('imachs')||'[]')}catch(e){}
+const topAch=()=>ACHS.reduce((t,a,i)=>unlocked.includes(a.id)?i:t,-1);   // index of highest unlocked, -1 none
+function scoreAttempt(){            // called once per game, at the collision
+  if(Math.floor(gs.score)<QUAL_SCORE)return null;
+  qual++;Hist.set('imqual',qual);
+  const a=ACHS.find(a=>qual>=a.at&&!unlocked.includes(a.id));
+  if(!a)return null;
+  unlocked.push(a.id);try{localStorage.setItem('imachs',JSON.stringify(unlocked));localStorage.setItem('imtopach',a.id)}catch(e){}
+  return a;
+}
+// six compositions, one system: square / circle / rectangles / line, palette of the logo
+const K='#161615',Yc='#F8A829',Bc='#013BF6',Rc='#F83E1F';
+const MARKS={
+ curious:[['c',60,62,15,Yc],['rect',84,26,12,12,K],['line',24,96,96,96]],
+ still:[['rect',22,28,46,64,K],['c',45,60,11,Yc],['rect',76,28,22,64,Rc]],
+ comeback:[['rect',18,46,44,44,Bc],['c',84,34,12,Yc],['line',18,100,102,100],['rect',70,64,8,26,K]],
+ tryer:[['rect',20,72,18,24,K],['rect',44,56,18,40,Bc],['rect',68,38,18,58,Rc],['c',96,30,9,Yc]],
+ built:[['rect',20,24,54,54,K],['rect',52,56,44,44,Bc],['rect',92,24,10,40,Rc],['c',62,66,10,Yc]],
+ club:[['rect',10,36,38,46,K],['c',29,59,9,Yc],['rect',52,36,34,46,Bc],['rect',90,36,16,46,Rc],['line',110,36,110,82]]};
+function markSVG(id){
+  return '<svg class="mark" viewBox="0 0 120 120" aria-hidden="true">'+MARKS[id].map(m=>
+    m[0]==='c'?`<circle cx="${m[1]}" cy="${m[2]}" r="${m[3]}" fill="${m[4]}"/>`:
+    m[0]==='line'?`<line x1="${m[1]}" y1="${m[2]}" x2="${m[3]}" y2="${m[4]}" stroke="${K}" stroke-width="1.5"/>`:
+    `<rect x="${m[1]}" y="${m[2]}" width="${m[3]}" height="${m[4]}" fill="${m[5]}"/>`).join('')+'</svg>';
+}
+let ulTimers=[];
+function showUnlock(a){
+  const ul=$('ul');$('ulMark').innerHTML=markSVG(a.id);$('ulName').textContent=a.name;$('ulMsg').textContent=a.msg;
+  ul.className='';ul.hidden=false;
+  if(!RM.matches)[...$('ulMark').querySelectorAll('rect,circle,line')].forEach((el,i)=>{
+    const ang=i*2.1+.6,dx=Math.cos(ang)*70,dy=Math.sin(ang)*60,rot=(i%2?-1:1)*(30+i*12);
+    el.style.transformBox='fill-box';el.style.transformOrigin='center';
+    el.animate([{transform:`translate(${dx}px,${dy}px) rotate(${rot}deg) scale(.6)`,opacity:0},{opacity:1,offset:.35},{transform:'none',opacity:1}],
+      {duration:760,delay:i*70,easing:'cubic-bezier(.2,.9,.2,1)',fill:'both'});
+  });
+  const st=(c,ms)=>ulTimers.push(setTimeout(()=>ul.classList.add(c),RM.matches?0:ms));
+  st('u1',650);st('u2',850);st('u3',980);
+  ulTimers.push(setTimeout(()=>{gs.canRestart=true;if(lastKey)$('ulGo').focus({preventScroll:true})},RM.matches?0:1000));
+}
+function hideUnlock(){ulTimers.forEach(clearTimeout);ulTimers=[];$('ul').hidden=true;$('ul').className=''}
+// orbit around the ball at the start of a new game: the variant of the highest recognition
+function drawOrbit(cx,cy,k){
+  const a=1-E.io(k),r=BR+7+3*E.io(k),rot=-Math.PI/2+k*2.2,lv=topAch();
+  x.save();x.globalAlpha=.55*a;x.strokeStyle=COL.ink;x.lineWidth=1;x.translate(cx,cy);x.rotate(rot);
+  const arc=(s,e,rr=r)=>{x.beginPath();x.arc(0,0,rr,s,e);x.stroke()};
+  if(lv<=0)arc(0,Math.PI*1.35);                                            // base trace / THE CURIOUS ONE
+  else if(lv===1){arc(0,.9);arc(Math.PI,Math.PI+.9)}                       // STILL HERE: two segments
+  else if(lv===2){x.beginPath();x.ellipse(0,0,r+4,r-2,.5,0,Math.PI*1.6);x.stroke()} // COMEBACK KID: asymmetric orbit
+  else if(lv===3){arc(0,1.4);arc(1.8,2.3);arc(2.7,4.4);arc(4.8,5.3)}      // PROFESSIONAL TRYER: uneven segments
+  else if(lv===4){arc(0,Math.PI*1.2);arc(.5,2.6,r+5);x.fillStyle=COL.ink;x.fillRect(r-2,-2,4,4)} // BUILT DIFFERENT
+  else{arc(0,Math.PI*2);for(let i=0;i<4;i++){const t=i*Math.PI/2;x.beginPath();x.moveTo(Math.cos(t)*(r+3),Math.sin(t)*(r+3));x.lineTo(Math.cos(t)*(r+7),Math.sin(t)*(r+7));x.stroke()}} // CLUB
+  x.restore();
+}
 const LEVEL_MSGS={1:{text:'JUST PLAY.',anim:'base',pause:false,dur:1200},
  2:{text:'STAY CURIOUS.',anim:'base'},3:{text:'ASK WHY.',anim:'base'},4:{text:'WHAT IF...?',anim:'base'},
  5:{text:'BREAK PATTERNS.',anim:'base'},6:{text:'EMBRACE CHAOS.',anim:'base'},7:{text:'CONNECT THE DOTS.',anim:'base'},
@@ -331,6 +414,7 @@ function showMsg(lv){
   gs.shown[lv]=true; gs.msg={...m,t0:performance.now(),dur:m.dur||MSG_DUR,pause:m.pause!==false};
   if(gs.msg.pause){Snd.level(lv);Snd.sfx('level');Snd.duck(.45);setTimeout(()=>Snd.duck(.9),gs.msg.dur)}
   if(gs.msg.pause&&gs.obs.length){const t=performance.now();gs.obs.forEach(o=>o.clear=t)}
+  if(gs.msg.pause)gs.tr=[];
 }
 function msgPausing(){
   if(!gs.msg)return false;
@@ -376,7 +460,7 @@ function drawBoing(now){
   const ang=Math.atan2(D.dy,D.dx), px=D.cx-D.dx*off, py=Math.min(D.cy-D.dy*off-lift, G-D.r*sp);
   D.fx=px;D.fy=py;
   x.save();x.translate(px,py);x.rotate(ang+tilt);x.beginPath();x.ellipse(0,0,D.r*sa,D.r*sp,0,0,Math.PI*2);x.fillStyle=COL.y;x.fill();x.restore();
-  if(t>=1&&gs.mode==='dying'){gs.mode='over';showOver()}
+  if(t>=1&&gs.mode==='dying'){gs.mode='over';if(gs.ach)showUnlock(gs.ach);else showOver()}
 }
 // the ball hops from the game into the period of OOPS.
 let bxAnim=null;
@@ -411,8 +495,8 @@ function showOver(){
   goTimers.push(setTimeout(()=>{gs.canRestart=true;if(lastKey)$('retry').focus({preventScroll:true})},640));
 }
 function hideOver(){goTimers.forEach(clearTimeout);goTimers=[];if(bxAnim){bxAnim.cancel();bxAnim=null}$('bx').hidden=true;over.hidden=true;over.className='';over.querySelector('.pt').className='pt'}
-function restartGame(){hideOver();held=false;newGame(true,'REPEAT.');gs.trace=RM.matches?null:performance.now();if(!RM.matches)gs.sq=-.22;Snd.level(1);Snd.start();Snd.duck(.9)}
-function newGame(play,word){gs={mode:play?'play':'ready',t:0,y:0,vy:0,sq:0,obs:[],spd:5.5,next:50,score:0,ground:true,lv:1,msg:null,shown:{},bestAt:hi,maxAt:maxLv};
+function restartGame(){hideOver();hideUnlock();held=false;newGame(true,'REPEAT.');gs.trace=RM.matches?null:performance.now();if(!RM.matches)gs.sq=-.22;Snd.level(1);Snd.start();Snd.duck(.9)}
+function newGame(play,word){gs={mode:play?'play':'ready',t:0,y:0,vy:0,sq:0,obs:[],tr:[],spd:5.5,next:50,score:0,ground:true,lv:1,msg:null,shown:{},bestAt:hi,maxAt:maxLv};
   if(!play)return;
   if(maxLv<1){maxLv=1;Hist.set('immaxlv',1)}attempts++;Hist.set('imattempts',attempts);gs.attempt=attempts;          // +1 per started game, exactly once
   if(!word&&!firstPlayShown){word='PLAY.';firstPlayShown=true}
@@ -430,6 +514,10 @@ function spawn(){
   const mk=(dx,blue)=>{const h=blue?32+Math.random()*(20+Lv*3):48+Math.random()*(20+Lv*4),w=blue?36+Math.random()*(20+Lv*3):22;gs.obs.push({x:W+20+dx,w,h:Math.min(h,100),c:blue?COL.b:COL.r})};
   if(Lv>=3&&r<Math.min(.15+Lv*.04,.45)){mk(0,true);mk(60+Math.random()*25,false)}
   else if(Lv>=5&&r>.85){mk(0,false);mk(30,false);mk(60,false)}
+  else if(Lv>=5&&r>.62){                                   // trampoline + a figure too tall to jump
+    const x0=W+20;gs.tr.push({x:x0,w:72,hit:0});
+    gs.obs.push({x:x0+55+gs.spd*16,w:28,h:162,c:COL.b,tall:true});
+    gs.next=Math.max(gs.next,(55+gs.spd*16+60)/gs.spd+70);return}
   else mk(0,Math.random()<.55);
   gs.next=Math.max(28-Lv,(65+Math.random()*55)-gs.spd*2.4-Lv*3);
 }
@@ -439,22 +527,25 @@ function gstep(){
   const nl=1+Math.floor(gs.score/100);if(nl>gs.lv){gs.lv=nl;showMsg(nl)}if(gs.lv>maxLv){maxLv=gs.lv;Hist.set('immaxlv',maxLv)}
   gs.spd=Math.min(16,5+gs.lv*1+gs.t/2000);
   gs.vy+=(held&&gs.vy<0)?.45:.85;gs.y+=gs.vy;
+  if(gs.y>=0&&!gs.ground){const tp=gs.tr.find(t=>PX>=t.x-6&&PX<=t.x+t.w+6);
+    if(tp){gs.y=-1;gs.vy=-19;gs.sq=.35;tp.hit=performance.now();Snd.sfx('jump');}}
   if(gs.y>=0){if(!gs.ground)gs.sq=.3;gs.y=0;gs.vy=0;gs.ground=true}
   if(--gs.next<=0)spawn();
-  gs.obs.forEach(o=>o.x-=gs.spd);gs.obs=gs.obs.filter(o=>o.x+o.w>-10);
+  gs.obs.forEach(o=>o.x-=gs.spd);gs.tr.forEach(t=>t.x-=gs.spd);gs.tr=gs.tr.filter(t=>t.x+t.w>-10);gs.obs=gs.obs.filter(o=>o.x+o.w>-10);
   const cx=PX,cy=G-BR+gs.y;
   for(const o of gs.obs){const nx=Math.max(o.x,Math.min(cx,o.x+o.w)),ny=Math.max(G-o.h,Math.min(cy,G));
-    if((cx-nx)**2+(cy-ny)**2<(BR-3)**2){if(gs.score>hi){hi=Math.floor(gs.score);try{localStorage.setItem('imjump',hi)}catch(e){}}startDie(cx,cy,nx,ny);return}}
+    if((cx-nx)**2+(cy-ny)**2<(BR-3)**2){if(gs.score>hi){hi=Math.floor(gs.score);try{localStorage.setItem('imjump',hi)}catch(e){}}gs.ach=scoreAttempt();startDie(cx,cy,nx,ny);return}}
 }
 function gdraw(){
   x.clearRect(0,0,W,247);
   const out=gs.mode==='over', dying=gs.mode==='dying';
   x.fillStyle=COL.ink;x.fillRect(0,G-1,W,2);
+  for(const t of gs.tr){const d=t.hit?Math.max(0,1-(performance.now()-t.hit)/180):0,dip=Math.sin(d*Math.PI)*4;
+    x.fillStyle=COL.r;x.fillRect(t.x+6,G-9,3,8);x.fillRect(t.x+t.w-9,G-9,3,8);x.fillStyle=COL.ink;x.fillRect(t.x,G-12+dip,t.w,4)}
   for(const o of gs.obs){if(o.clear){const k=Math.min(1,(performance.now()-o.clear)/(RM.matches?150:450)),e=E.io(k),h=o.h*(1-e);if(h>.5){x.globalAlpha=1-e*.6;x.fillStyle=o.c;x.fillRect(o.x,G-h,o.w,h);x.globalAlpha=1}continue}if(out){x.strokeStyle=o.c;x.lineWidth=2;x.strokeRect(o.x+1,G-o.h+1,o.w-2,o.h-2)}else{x.fillStyle=o.c;x.fillRect(o.x,G-o.h,o.w,o.h)}}
   gs.sq*=.82;const rx=BR*(1+gs.sq),ry=BR*(1-gs.sq);
   if(gs.trace&&gs.mode==='play'){const k=(performance.now()-gs.trace)/1100;
-    if(k>=1)gs.trace=null;else{const a=1-E.io(k);x.save();x.globalAlpha=.55*a;x.strokeStyle=COL.ink;x.lineWidth=1;x.beginPath();
-      const r=BR+7+3*E.io(k),st=-Math.PI/2+k*2.2;x.arc(PX,G-BR+gs.y,r,st,st+Math.PI*1.35);x.stroke();x.restore()}}
+    if(k>=1)gs.trace=null;else drawOrbit(PX,G-BR+gs.y,k)}
   if(dying)drawBoing(performance.now());else if(!out){x.beginPath();x.ellipse(PX,G-ry+gs.y,rx,ry,0,0,Math.PI*2);x.fillStyle=COL.y;x.fill()}
   const hudA=gs.msg&&!out?.2:1;x.globalAlpha=hudA;x.fillStyle=COL.ink;x.textAlign='right';x.font='700 15px system-ui,sans-serif';
   x.fillText(Math.floor(gs.score)+'',W-20,30);x.font='500 11px system-ui,sans-serif';x.globalAlpha=.6;
