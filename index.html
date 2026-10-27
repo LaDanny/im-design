@@ -254,6 +254,7 @@ function hoverFrame(now){
   });
 }
 // ---------- sound: original ambient score, generated live (Web Audio) ----------
+const buzz=p=>{try{if(Snd.on&&navigator.vibrate)navigator.vibrate(p)}catch(e){}};
 const Snd=(()=>{
   let ac,master,music,bus,verb,dly,on=true,started=false,timer=null,step=0,level=1,nextT=0;
   try{on=localStorage.getItem('imsound')!=='off'}catch(e){}
@@ -537,13 +538,13 @@ function gstep(){
   gs.spd=Math.min(16,5+gs.lv*1+gs.t/2000);
   gs.vy+=(held&&gs.vy<0&&!gs.boost)?.45:.85;gs.y+=gs.vy;
   if(gs.y>=0&&!gs.ground){const tp=gs.tr.find(t=>PX>=t.x-12&&PX<=t.x+t.w+12);
-    if(tp){gs.y=-1;gs.vy=-19;gs.boost=true;gs.sq=.35;tp.hit=performance.now();Snd.sfx('jump');}}
+    if(tp){gs.y=-1;gs.vy=-19;gs.boost=true;gs.sq=.35;tp.hit=performance.now();Snd.sfx('jump');buzz(18);}}
   if(gs.y>=0){gs.boost=false;if(!gs.ground)gs.sq=.3;gs.y=0;gs.vy=0;gs.ground=true}
   if(--gs.next<=0)spawn();
   gs.obs.forEach(o=>o.x-=gs.spd);gs.tr.forEach(t=>t.x-=gs.spd);gs.tr=gs.tr.filter(t=>t.x+t.w>-10);gs.obs=gs.obs.filter(o=>o.x+o.w>-10);
   const cx=PX,cy=G-BR+gs.y;
   for(const o of gs.obs){const nx=Math.max(o.x,Math.min(cx,o.x+o.w)),ny=Math.max(G-o.h,Math.min(cy,G));
-    if((cx-nx)**2+(cy-ny)**2<(BR-3)**2){if(gs.score>hi){hi=Math.floor(gs.score);try{localStorage.setItem('imjump',hi)}catch(e){}}gs.ach=scoreAttempt();startDie(cx,cy,nx,ny);return}}
+    if((cx-nx)**2+(cy-ny)**2<(BR-3)**2){if(gs.score>hi){hi=Math.floor(gs.score);try{localStorage.setItem('imjump',hi)}catch(e){}}gs.ach=scoreAttempt();buzz([35,40,25]);startDie(cx,cy,nx,ny);return}}
 }
 function gdraw(){
   x.clearRect(0,0,W,247);
