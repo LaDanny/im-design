@@ -175,7 +175,7 @@ function hoverFrame(now){
   const a=E.io(cl(hp)), b=cl(hp-1), bo=E.back(b);
   if(hp>0)$('t2').setAttribute('transform',`translate(${-360*a} 0)`);
   document.querySelectorAll('#jump text').forEach((t,i)=>{
-    const hop=b>=1?-Math.abs(Math.sin(now/260-i*.55))*12:0;
+    let hop=0;if(b>=1){const c=((now-(window._jt0||now))/1000)%2.6-i*.07;if(c>0&&c<.55){const u=c/.55;hop=-9*Math.sin(Math.PI*E.io(u))}}else window._jt0=now+250;
     t.setAttribute('x',(+t.dataset.x||455)+L(-400,0,bo));t.setAttribute('transform',`translate(0 ${hop})`);
     t.style.visibility=hp>1?'visible':'hidden';
   });
