@@ -42,7 +42,7 @@
   --sans:"Inter Tight","Helvetica Neue",Arial,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --gut:max(20px,env(safe-area-inset-left,0px));
-  --max:1280px; --ease:cubic-bezier(.2,.8,.2,1);
+  --max:1280px; --sp:clamp(88px,11vw,168px); --ease:cubic-bezier(.2,.8,.2,1);
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -85,18 +85,18 @@ section{position:relative}
 .sec-num{padding-top:14px}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);margin:0 0 14px;text-transform:uppercase}
 .h2{font:800 clamp(34px,4.6vw,58px)/.98 var(--sans);letter-spacing:-.045em;margin:0;text-wrap:balance}
-.reveal{transition:transform .8s var(--ease),opacity .8s var(--ease)}
-.js .reveal:not(.in){transform:translateY(14px);opacity:.75}
+.reveal,.rv{transition:transform 1s var(--ease),opacity .9s var(--ease);transition-delay:var(--d,0s)}
+.js .reveal:not(.in),.js .rv:not(.in){transform:translateY(32px);opacity:0}
 
 /* ---------- hero ---------- */
-.hero{padding:56px 0 72px}
-.hero .wrap{display:grid;grid-template-columns:56px minmax(0,1.3fr) minmax(0,.8fr);gap:0 20px}
-.hero h1{font:800 clamp(64px,9.2vw,132px)/.86 var(--sans);letter-spacing:-.06em;margin:0 0 36px}
+.hero{padding:clamp(56px,7vw,104px) 0 var(--sp)}
+.hero .wrap{display:grid;grid-template-columns:56px minmax(0,1.12fr) minmax(0,1fr);gap:0 20px}
+.hero h1{font:800 clamp(64px,9.2vw,132px)/.86 var(--sans);letter-spacing:-.06em;margin:0 0 52px}
 .hero h1 .dot{color:var(--or)}
 .hero h1 .flip{color:transparent;-webkit-text-stroke:2px var(--ink);transition:color .9s var(--ease) .9s}
 .loaded .hero h1 .flip{color:var(--ink)}
 .hero h1:hover .flip{color:transparent;transition-delay:0s;transition-duration:.35s}
-.hero .copy{max-width:56ch;display:grid;gap:14px;font-size:17px;color:#2A2826}
+.hero .copy{max-width:56ch;display:grid;gap:18px;font-size:17px;color:#2A2826}
 .hero .copy p{margin:0}
 .hero .copy .wink{font-weight:500;color:var(--ink)}
 .hero-art{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:28px;align-self:start;margin-top:8px}
@@ -106,6 +106,13 @@ section{position:relative}
 .comp .s1{--dx:-40px;--dy:-60px;animation-delay:.05s!important}
 .comp .s2{--dx:60px;--dy:40px;--r:-14deg;animation-delay:.2s!important}
 .comp .s3{--dx:-30px;--dy:70px;animation-delay:.32s!important}
+.fl{transform-box:fill-box;transform-origin:center}
+.loaded .f1{animation:fl1 11s ease-in-out 1.2s infinite}
+.loaded .f2{animation:fl2 13s ease-in-out 1.2s infinite}
+.loaded .f3{animation:fl3 15s ease-in-out 1.2s infinite}
+@keyframes fl1{0%,100%{transform:none}50%{transform:translate(6px,-8px) rotate(1.2deg)}}
+@keyframes fl2{0%,100%{transform:none}33%{transform:translate(-7px,5px) scale(1.012)}66%{transform:translate(5px,-4px) scale(.992)}}
+@keyframes fl3{0%,100%{transform:none}50%{transform:translate(-5px,9px)}}
 @keyframes inShape{from{transform:translate(var(--dx,0),var(--dy,0)) rotate(var(--r,0deg)) scale(.9)}to{transform:none}}
 .comp .ring{transition:fill .5s var(--ease)}
 .hero-art:hover .comp .ring{fill:var(--or)}
@@ -114,8 +121,8 @@ section{position:relative}
 .side p{margin:40px 0 0;text-transform:uppercase;font-family:var(--mono);font-size:12px;letter-spacing:.08em;line-height:1.6}
 
 /* ---------- work ---------- */
-.work{background:var(--band);padding:64px 0 0}
-.work-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px 48px;align-items:end;padding-bottom:44px}
+.work{background:var(--band);padding:var(--sp) 0 0}
+.work-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px 48px;align-items:end;padding-bottom:clamp(56px,6vw,88px)}
 .work-top p{margin:0;max-width:46ch;color:#3A3734}
 .cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid rgba(22,22,21,.15);background:var(--bg)}
 .card{border-right:1px solid rgba(22,22,21,.12);border-bottom:1px solid rgba(22,22,21,.12);margin:0}
@@ -139,12 +146,12 @@ section{position:relative}
 .panel{grid-column:1/-1;display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease),visibility 0s linear .45s;visibility:hidden;background:var(--paper)}
 .panel.open{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .45s var(--ease),visibility 0s}
 .panel>.pin{overflow:hidden;min-height:0}
-.pbody{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.35fr) minmax(0,1fr);gap:40px 56px;padding:48px 40px 56px;border-bottom:1px solid rgba(22,22,21,.12);opacity:0;transform:translateY(10px);transition:opacity .35s,transform .45s var(--ease)}
+.pbody{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.35fr) minmax(0,1fr);gap:48px 64px;padding:clamp(48px,5vw,80px) clamp(28px,4vw,56px) clamp(56px,6vw,88px);border-bottom:1px solid rgba(22,22,21,.12);opacity:0;transform:translateY(10px);transition:opacity .35s,transform .45s var(--ease)}
 .panel.open .pbody{opacity:1;transform:none;transition-delay:.12s}
 .pbody h3{font:800 clamp(30px,3.4vw,44px)/1 var(--sans);letter-spacing:-.045em;margin:10px 0 18px;text-wrap:balance}
 .pbody .tags{font-family:var(--mono);font-size:12px;letter-spacing:.04em;line-height:1.7}
 .pbody .rule{width:56px;height:1px;background:var(--ink);margin-top:28px}
-.ptext{display:grid;gap:14px;align-content:start;max-width:62ch}
+.ptext{display:grid;gap:16px;align-content:start;max-width:62ch}
 .ptext p{margin:0;color:#2A2826}
 .fact{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;display:flex;flex-wrap:wrap;gap:6px 16px;padding:12px 0;border-top:1px solid var(--ink);border-bottom:1px solid rgba(22,22,21,.15)}
 .pull{font:700 clamp(19px,1.8vw,24px)/1.22 var(--sans);letter-spacing:-.02em;color:var(--ink)!important;margin-top:6px!important}
@@ -156,7 +163,7 @@ section{position:relative}
 .pvis .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;fill:var(--ink)}
 
 /* ---------- think ---------- */
-.think{padding:80px 0;border-top:1px solid rgba(22,22,21,.12)}
+.think{padding:var(--sp) 0;border-top:1px solid rgba(22,22,21,.12)}
 .think .wrap{display:grid;grid-template-columns:56px minmax(0,.9fr) minmax(0,2.1fr);gap:0 20px;align-items:start}
 .qs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid var(--ink)}
 .qs li{padding:6px 20px 28px 0;position:relative}
@@ -168,7 +175,7 @@ section{position:relative}
 .qs li:hover::after{transform:scaleX(1)}
 
 /* ---------- road ---------- */
-.road{padding:80px 0;border-top:1px solid rgba(22,22,21,.12)}
+.road{padding:var(--sp) 0;border-top:1px solid rgba(22,22,21,.12)}
 .road .wrap{display:grid;grid-template-columns:56px minmax(0,1fr) minmax(0,2.1fr);gap:0 32px}
 .road .h2,.think .h2{font-size:clamp(32px,3.6vw,48px)}
 .tl{display:grid;grid-template-columns:.7fr 1.2fr 1fr 1.25fr 1fr;gap:0 16px}
@@ -187,7 +194,7 @@ section{position:relative}
 .par .tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted)}
 
 /* ---------- beyond ---------- */
-.beyond{background:var(--ink);color:#EDEAE6;padding:96px 0 104px;overflow:hidden}
+.beyond{background:var(--ink);color:#EDEAE6;padding:calc(var(--sp) + 16px) 0 calc(var(--sp) + 24px);overflow:hidden}
 .beyond .wrap{display:grid;grid-template-columns:56px minmax(0,.9fr) minmax(0,1.3fr) minmax(0,.6fr);gap:0 20px;position:relative;z-index:1}
 .beyond .idx{color:#EDEAE6}
 .beyond .eyebrow{color:#A8A39C}
@@ -195,14 +202,14 @@ section{position:relative}
 .beyond .ol{color:transparent;-webkit-text-stroke:1.5px #fff;transition:color .5s var(--ease)}
 .beyond .h2:hover .ol{color:#fff}
 .beyond .h2 .dot{color:var(--or);-webkit-text-stroke:0}
-.btext{display:grid;gap:16px;max-width:54ch;font-size:16.5px}
+.btext{display:grid;gap:20px;max-width:54ch;font-size:16.5px}
 .btext p{margin:0}
 .btext .last{color:#A8A39C}
 .big-ring{position:absolute;right:-200px;bottom:-300px;width:min(600px,70vw);aspect-ratio:1;border:1.5px solid #EDEAE6;border-radius:50%;opacity:.9;pointer-events:none}
 .beyond-media:empty{display:none}
 
 /* ---------- next ---------- */
-.next{padding:80px 0 96px}
+.next{padding:var(--sp) 0 calc(var(--sp) + 16px)}
 .next .wrap{display:grid;grid-template-columns:56px minmax(0,.8fr) minmax(0,1.3fr) auto;gap:24px 20px;align-items:start}
 .next .h2 .ln{display:block;width:130px;height:0;border-top:1.5px solid var(--ink);margin-top:20px}
 .next .txt{display:grid;gap:12px;max-width:52ch}
@@ -221,7 +228,7 @@ section{position:relative}
   .qs{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:24px}
   .qs li:nth-child(4){padding-left:0;border-left:0}
   .think .wrap,.road .wrap{grid-template-columns:56px minmax(0,1fr)}
-  .think .wrap>.qs-wrap,.road .wrap>.tl-wrap{grid-column:2;margin-top:40px}
+  .think .wrap>.qs-wrap,.road .wrap>.tl-wrap{grid-column:2;margin-top:56px}
 }
 @media (max-width:980px){
   .nav{display:none}
@@ -235,7 +242,7 @@ section{position:relative}
   .pvis{grid-column:1/-1;max-width:420px}
   .work-top{grid-template-columns:1fr}
   .beyond .wrap{grid-template-columns:40px minmax(0,1fr)}
-  .beyond .btext{grid-column:2;margin-top:32px}
+  .beyond .btext{grid-column:2;margin-top:44px}
   .next .wrap{grid-template-columns:40px minmax(0,1fr)}
   .next .txt,.next .acts{grid-column:2}
   .cv-note{text-align:left}
@@ -277,7 +284,7 @@ section{position:relative}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}
-  .js .reveal:not(.in),.js .tl:not(.in) .bar{transform:none;opacity:1}
+  .js .reveal:not(.in),.js .rv:not(.in),.js .tl:not(.in) .bar{transform:none;opacity:1}
 }
 </style>
 </head>
@@ -312,7 +319,7 @@ section{position:relative}
     <span class="idx sec-num" aria-hidden="true">01</span>
     <div>
       <h1 id="h-hero">Hey,<br>I’m <span class="flip">Danny</span><span class="dot">.</span></h1>
-      <div class="copy">
+      <div class="copy" data-stagger>
         <p>Soy Daniela Del Castillo. Llevo más de 20 años trabajando entre diseño, creatividad, tecnología y negocios.</p>
         <p>Comencé en la comunicación visual. Después llegaron las experiencias digitales, los productos, los servicios, la estrategia y el liderazgo de equipos.</p>
         <p>Hoy trabajo en problemas que necesitan distintas miradas. A veces diseño una experiencia, otras veces una metodología, una estrategia o una manera de organizar el trabajo.</p>
@@ -320,11 +327,11 @@ section{position:relative}
         <p class="wink">Y sí, todavía me entusiasma una buena tipografía.</p>
       </div>
     </div>
-    <div class="hero-art">
+    <div class="hero-art reveal" style="--d:.15s">
       <svg class="comp" viewBox="0 0 400 420" aria-hidden="true">
-        <rect class="s s1" x="120" y="12" width="168" height="230" fill="none" stroke="#013BF6" stroke-width="2.5"/>
-        <rect class="s s3" x="214" y="170" width="150" height="232" fill="#D5CBBF"/>
-        <circle class="s s2 ring" cx="160" cy="250" r="128" fill="#F83E1F"/>
+        <g class="fl f1"><rect class="s s1" x="120" y="12" width="168" height="230" fill="none" stroke="#013BF6" stroke-width="2.5"/></g>
+        <g class="fl f3"><rect class="s s3" x="214" y="170" width="150" height="232" fill="#D5CBBF"/></g>
+        <g class="fl f2"><circle class="s s2 ring" cx="160" cy="250" r="128" fill="#F83E1F"/></g>
       </svg>
       <div class="side">
         <ul><li>Diseño</li><li>Experiencias</li><li>Equipos</li><li>Ideas</li><li>Maneras de</li><li>hacer las cosas</li></ul>
@@ -359,8 +366,8 @@ section{position:relative}
       <p class="eyebrow">How I work</p>
       <h2 class="h2" id="h-think">Algunas preguntas que me acompañan.</h2>
     </div>
-    <div class="qs-wrap reveal">
-      <ol class="qs">
+    <div class="qs-wrap">
+      <ol class="qs" data-stagger>
         <li><span class="k">01</span><p>¿Estamos resolviendo el problema correcto?</p></li>
         <li><span class="k">02</span><p>¿Qué sabemos y qué estamos suponiendo?</p></li>
         <li><span class="k">03</span><p>¿Podría ser más simple?</p></li>
@@ -403,7 +410,7 @@ section{position:relative}
       <p class="eyebrow">Beyond the pixels</p>
       <h2 class="h2" id="h-beyond">También hago otras <span class="ol">cosas</span><span class="dot">.</span></h2>
     </div>
-    <div class="btext reveal">
+    <div class="btext" data-stagger>
       <p>Escribo cuentos un poco extraños. En uno de ellos, alguien termina guardando sus pestañas en una bolsa Ziploc.</p>
       <p>Me gusta ilustrar, pintar y experimentar con materiales. Puedo pasar bastante tiempo buscando un papel, una técnica o un color específico.</p>
       <p>Juego fútbol. También videojuegos. Y me tomo ambas cosas probablemente más en serio de lo necesario.</p>
@@ -421,11 +428,11 @@ section{position:relative}
   <div class="wrap">
     <span class="idx sec-num" aria-hidden="true">06</span>
     <h2 class="h2 reveal" id="h-next">What’s next?<span class="ln" aria-hidden="true"></span></h2>
-    <div class="txt reveal">
+    <div class="txt" data-stagger>
       <p>Actualmente también desarrollo <strong>I’m Design</strong>, mi espacio independiente para trabajar en proyectos donde convergen diseño, creatividad, estrategia y tecnología.</p>
       <p>Todavía tengo varias ideas dando vueltas.<br>Algunas ya están tomando forma.</p>
     </div>
-    <div class="acts">
+    <div class="acts reveal" style="--d:.2s">
       <a class="btn hot" href="/">Explore I’m Design <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 10L10 2M4 2h6v6"/></svg></a>
       <a class="btn ghost cv" href="#" aria-disabled="true" aria-describedby="cvnote">Download my CV <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 1v10M2 7l4 4 4-4"/></svg></a>
       <p class="cv-note" id="cvnote">CV disponible pronto</p>
@@ -515,7 +522,7 @@ const CARDS=[
 const plus='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 1v10M1 6h10"/></svg>';
 const cardsEl=document.getElementById('cards');
 cardsEl.innerHTML=CARDS.map((c,i)=>`
- <article class="card" style="order:${i*2}">
+ <article class="card rv" style="order:${i*2};--d:${(i%6)*.09}s">
   <h3 style="margin:0;height:100%"><button class="card-btn" type="button" id="cb-${c.n}" aria-expanded="false" aria-controls="p-${c.n}">
    <span class="n">${c.n}</span><span class="t">${c.t}</span>
    <svg class="glyph" viewBox="0 0 150 100" aria-hidden="true">${c.glyph}</svg>
@@ -537,10 +544,16 @@ let openIdx=-1;
 const cols=()=>getComputedStyle(cardsEl).gridTemplateColumns.split(' ').length;
 function place(){panels.forEach((p,i)=>{const c=cols(),rowEnd=Math.min(CARDS.length-1,Math.floor(i/c)*c+c-1);p.style.order=rowEnd*2+1})}
 function setOpen(i){
+  const prev=openIdx;
+  // where will the card sit once the previously open panel (if above it) has collapsed?
+  let target=null;
+  if(i>=0){const absY=el=>{let y=0;while(el){y+=el.offsetTop;el=el.offsetParent}return y};   // ignores reveal transforms
+    const card=btns[i].closest('.card');let y=absY(card);
+    if(prev>=0&&prev!==i){const pp=panels[prev];if(absY(pp)<y)y-=pp.offsetHeight}
+    target=Math.max(0,y-document.querySelector('.hdr').offsetHeight)}
   btns.forEach((b,j)=>{const on=j===i;b.setAttribute('aria-expanded',on);panels[j].classList.toggle('open',on);panels[j].inert=!on});
   openIdx=i;
-  if(i>=0)setTimeout(()=>{const r=panels[i].getBoundingClientRect();if(r.top>innerHeight-120||r.top<70)
-    panels[i].scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'})},480);
+  if(target!==null)scrollTo({top:target,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
 }
 btns.forEach((b,i)=>b.addEventListener('click',()=>setOpen(openIdx===i?-1:i)));
 panels.forEach(p=>p.inert=true);
@@ -558,10 +571,11 @@ addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>8),{passiv
 const links=[...document.querySelectorAll('.nav a')];
 if('IntersectionObserver' in window){
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
-  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  document.querySelectorAll('[data-stagger]').forEach(c=>[...c.children].forEach((el,i)=>{el.classList.add('rv');el.style.setProperty('--d',(i*.09)+'s')}));
+  document.querySelectorAll('.reveal,.rv').forEach(el=>io.observe(el));
   const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.setAttribute('aria-current',a.getAttribute('href')==='#'+e.target.id?'true':'false'))}}),{rootMargin:'-45% 0px -50% 0px'});
   document.querySelectorAll('main section[id]').forEach(s=>so.observe(s));
-}else document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+}else document.querySelectorAll('.reveal,.rv').forEach(el=>el.classList.add('in'));
 requestAnimationFrame(()=>document.documentElement.classList.add('loaded'));
 </script>
 </body>
