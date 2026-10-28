@@ -93,9 +93,9 @@ section{position:relative}
 .hero .wrap{display:grid;grid-template-columns:56px minmax(0,1.12fr) minmax(0,1fr);gap:0 20px}
 .hero h1{font:800 clamp(64px,9.2vw,132px)/.86 var(--sans);letter-spacing:-.06em;margin:0 0 52px}
 .hero h1 .dot{color:var(--or)}
-.hero h1 .flip{color:transparent;-webkit-text-stroke:2px var(--ink);transition:color .9s var(--ease) .9s}
+.hero h1 .flip{color:var(--bg);-webkit-text-stroke:4px var(--ink);paint-order:stroke fill;transition:color .9s var(--ease) .9s}
 .loaded .hero h1 .flip{color:var(--ink)}
-.hero h1:hover .flip{color:transparent;transition-delay:0s;transition-duration:.35s}
+.hero h1:hover .flip{color:var(--bg);transition-delay:0s;transition-duration:.35s}
 .hero .copy{max-width:56ch;display:grid;gap:18px;font-size:17px;color:#2A2826}
 .hero .copy p{margin:0}
 .hero .copy .wink{font-weight:500;color:var(--ink)}
@@ -199,7 +199,7 @@ section{position:relative}
 .beyond .idx{color:#EDEAE6}
 .beyond .eyebrow{color:#A8A39C}
 .beyond .h2{font-size:clamp(46px,6vw,80px);color:#fff}
-.beyond .ol{color:transparent;-webkit-text-stroke:1.5px #fff;transition:color .5s var(--ease)}
+.beyond .ol{color:var(--ink);-webkit-text-stroke:3px #fff;paint-order:stroke fill;transition:color .5s var(--ease)}
 .beyond .h2:hover .ol{color:#fff}
 .beyond .h2 .dot{color:var(--or);-webkit-text-stroke:0}
 .btext{display:grid;gap:20px;max-width:54ch;font-size:16.5px}
@@ -286,6 +286,51 @@ section{position:relative}
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}
   .js .reveal:not(.in),.js .rv:not(.in),.js .tl:not(.in) .bar{transform:none;opacity:1}
 }
+
+/* ---------- skills ---------- */
+.skills{padding:var(--sp) 0 0;border-top:1px solid rgba(22,22,21,.12)}
+.sk-row{display:grid;grid-template-columns:56px minmax(0,1fr) minmax(0,1.6fr);gap:0 32px;align-items:start}
+.h3{font:800 clamp(26px,2.6vw,34px)/1.02 var(--sans);letter-spacing:-.04em;margin:0;text-wrap:balance}
+.kp{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.kp li{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,200px);align-items:center;gap:24px;padding:18px 0;border-bottom:1px solid rgba(22,22,21,.15);cursor:default;outline:none}
+.kp .kn{font:600 clamp(17px,1.5vw,20px)/1.2 var(--sans);letter-spacing:-.015em;transition:transform .45s var(--ease)}
+.kp .dots{width:100%;height:auto;overflow:visible}
+.kp .d{transform-box:fill-box;transform-origin:center;transition:transform .5s var(--ease),fill .35s,stroke .35s;transition-delay:calc(var(--i)*30ms)}
+.kp li:hover .kn,.kp li:focus-visible .kn{transform:translateX(8px)}
+.kp li:hover .d,.kp li:focus-visible .d{transform:translateX(-6px)}
+.kp li:hover .d:not(.s),.kp li:focus-visible .d:not(.s){fill:var(--c)}
+.kp li:hover .d.s,.kp li:focus-visible .d.s{fill:transparent;stroke:var(--c)}
+.kp li:focus-visible{box-shadow:inset 3px 0 0 var(--bl)}
+.caps-row{margin-top:clamp(96px,10vw,150px)}
+.caps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:22px 18px;align-items:flex-start}
+.cc{width:var(--sz);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;padding:18px;margin-top:var(--off);
+    border:1.5px solid var(--c);transition:background .45s var(--ease),color .45s,transform .5s var(--ease);outline:none}
+.cc span{font:700 clamp(14px,1.25vw,17px)/1.15 var(--sans);letter-spacing:-.01em;max-width:13ch}
+.cc.is-o{background:transparent;color:var(--ink)}
+.cc.is-s{background:var(--c);color:#fff}
+.cc.is-s[style*="F8A829"]{color:var(--ink)}
+.cc.is-o:hover,.cc.is-o:focus-visible{background:var(--c);color:#fff}
+.cc.is-s:hover,.cc.is-s:focus-visible{background:transparent;color:var(--ink)}
+.cc:hover,.cc:focus-visible{transform:translateY(-6px)}
+.cc:focus-visible{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--bl)}
+.interests{background:var(--ink);color:#EDEAE6;margin-top:var(--sp);padding:clamp(56px,6vw,88px) 0 clamp(8px,2vw,24px)}
+.interests .eyebrow{color:#A8A39C;padding-left:76px}
+.ints{list-style:none;margin:28px 0 0;padding:0 0 0 76px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:24px}
+.ints li{display:flex;flex-direction:column;align-items:flex-start;gap:14px;outline:none;cursor:default}
+.ints svg{width:44px;height:44px;fill:none;stroke:#EDEAE6;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s,transform .45s var(--ease)}
+.ints .ac{transition:fill .3s}
+.ints span{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
+.ints li:hover svg,.ints li:focus-visible svg{stroke:var(--h);transform:translateY(-4px)}
+.ints li:hover .ac,.ints li:focus-visible .ac{fill:var(--h)}
+.ints li:focus-visible span{text-decoration:underline;text-underline-offset:4px}
+.skills+.beyond{padding-top:calc(var(--sp) - 24px)}
+@media (max-width:1180px){.sk-row{grid-template-columns:56px minmax(0,1fr)}.sk-row>.kp,.sk-row>.caps{grid-column:2;margin-top:48px}}
+@media (max-width:980px){.sk-row{grid-template-columns:40px minmax(0,1fr)}.interests .eyebrow{padding-left:60px}.ints{padding-left:60px;grid-template-columns:repeat(4,minmax(0,1fr));row-gap:36px}}
+@media (max-width:720px){
+  .kp li{grid-template-columns:1fr;gap:10px}.kp .dots{max-width:180px}
+  .caps{gap:14px}.cc{width:calc(var(--sz)*.72);margin-top:calc(var(--off)*.4);padding:12px}
+  .interests .eyebrow,.ints{padding-left:0}.ints{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:440px){.sk-row{grid-template-columns:28px minmax(0,1fr)}.cc{width:calc(var(--sz)*.62)}.cc span{font-size:13px}}
 </style>
 </head>
 <body>
@@ -300,7 +345,8 @@ section{position:relative}
         <li><a href="#work">02. Work</a></li>
         <li><a href="#think">03. Think</a></li>
         <li><a href="#road">04. Experience</a></li>
-        <li><a href="#beyond">05. Beyond</a></li>
+        <li><a href="#skills">05. Skills</a></li>
+        <li><a href="#beyond">06. Beyond</a></li>
       </ul>
     </nav>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">MENU</button>
@@ -401,11 +447,39 @@ section{position:relative}
   </div>
 </section>
 
-<!-- 05 · BEYOND -->
+<!-- 05 · SKILLS -->
+<section class="skills" id="skills" aria-labelledby="h-skills">
+  <div class="wrap">
+    <div class="sk-row">
+      <span class="idx sec-num" aria-hidden="true">05</span>
+      <div class="reveal">
+        <p class="eyebrow">01 / Knowledge &amp; Practice</p>
+        <h2 class="h2" id="h-skills">Things I’ve learned to do.</h2>
+      </div>
+      <ul class="kp" data-stagger aria-label="Disciplinas"><li tabindex="0"><span class="kn">Experience & Product Design</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#161615"><circle class="d s" fill="#161615" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">UX Research & Discovery</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#013BF6"><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">Product & Design Strategy</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#161615"><circle class="d s" fill="#161615" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">Creative Direction & Branding</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#F83E1F"><circle class="d s" fill="#F83E1F" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d s" fill="#F83E1F" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F83E1F" stroke-width="1.4" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F83E1F" stroke-width="1.4" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d s" fill="#F83E1F" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d s" fill="#F83E1F" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F83E1F" stroke-width="1.4" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d s" fill="#F83E1F" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F83E1F" stroke-width="1.4" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">Design Leadership & Talent Development</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#161615"><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">DesignOps & Ways of Working</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#013BF6"><circle class="d s" fill="#013BF6" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">UX Measurement & Optimization</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#F8A829"><circle class="d s" fill="#F8A829" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F8A829" stroke-width="1.4" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F8A829" stroke-width="1.4" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d s" fill="#F8A829" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F8A829" stroke-width="1.4" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d s" fill="#F8A829" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d s" fill="#F8A829" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d s" fill="#F8A829" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F8A829" stroke-width="1.4" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">AI Applied to Design</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#161615"><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li></ul>
+    </div>
+    <div class="sk-row caps-row">
+      <span aria-hidden="true"></span>
+      <div class="reveal">
+        <p class="eyebrow">02 / Beyond the Job Title</p>
+        <h3 class="h3">Lo que llevo a cualquier rol.</h3>
+      </div>
+      <ul class="caps" data-stagger aria-label="Capacidades transversales"><li class="cc is-o" tabindex="0" style="--sz:230px;--off:0px;--c:#161615"><span>Pensamiento estructurado</span></li><li class="cc is-s" tabindex="0" style="--sz:176px;--off:70px;--c:#161615"><span>Pensamiento crítico</span></li><li class="cc is-s" tabindex="0" style="--sz:204px;--off:-10px;--c:#F83E1F"><span>Creatividad</span></li><li class="cc is-o" tabindex="0" style="--sz:196px;--off:96px;--c:#013BF6"><span>Comunicación & Storytelling</span></li><li class="cc is-s" tabindex="0" style="--sz:160px;--off:20px;--c:#F8A829"><span>Adaptabilidad</span></li><li class="cc is-o" tabindex="0" style="--sz:214px;--off:-30px;--c:#161615"><span>Colaboración & Mentoring</span></li></ul>
+    </div>
+  </div>
+  <div class="interests">
+    <div class="wrap">
+      <p class="eyebrow">03 / Other Interests</p>
+      <ul class="ints" data-stagger aria-label="Otros intereses"><li tabindex="0" style="--h:#F83E1F"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 32l3-9L27 7l6 6-16 16-9 3z"/><path d="M24 10l6 6"/><path class="ac" d="M8 32l3-9 6 6z"/></svg><span>Ilustración</span></li><li tabindex="0" style="--h:#013BF6"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M16 29V9l16-3v19"/><circle class="ac" cx="12" cy="29" r="4"/><circle cx="28" cy="25" r="4"/></svg><span>Música</span></li><li tabindex="0" style="--h:#F8A829"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 11c-4-3-9-3-13-2v21c4-1 9-1 13 2 4-3 9-3 13-2V9c-4-1-9-1-13 2z"/><path d="M20 11v21"/></svg><span>Libros</span></li><li tabindex="0" style="--h:#F83E1F"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="11" y="11" width="18" height="18"/><rect class="ac" x="16" y="16" width="8" height="8"/><path d="M15 6v5M20 6v5M25 6v5M15 29v5M20 29v5M25 29v5M6 15h5M6 20h5M6 25h5M29 15h5M29 20h5M29 25h5"/></svg><span>Tecnología</span></li><li tabindex="0" style="--h:#013BF6"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M12 13h16a7 7 0 0 1 7 7v1a6 6 0 0 1-11 3h-8a6 6 0 0 1-11-3v-1a7 7 0 0 1 7-7z"/><path d="M12 17v6M9 20h6"/><circle class="ac" cx="26" cy="18.5" r="1.6"/><circle cx="29" cy="22" r="1.6"/></svg><span>Videojuegos</span></li><li tabindex="0" style="--h:#F8A829"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="13"/><path class="ac" d="M20 14l5 3.6-1.9 5.9h-6.2L15 17.6z"/><path d="M20 7v7M25 17.6l7-2.3M23.1 23.5l4.3 6M16.9 23.5l-4.3 6M15 17.6l-7-2.3"/></svg><span>Fútbol</span></li><li tabindex="0" style="--h:#F83E1F"><svg viewBox="0 0 40 40" aria-hidden="true"><circle class="ac" cx="20" cy="20" r="4.5"/><path d="M20 15.5V7M24 18l7-4M24 22l6 6M16 22l-6 6M16 18l-7-4M20 24.5V33"/><circle cx="20" cy="6" r="1.6"/><circle cx="32" cy="13.5" r="1.6"/><circle cx="31" cy="29" r="1.6"/><circle cx="9" cy="29" r="1.6"/><circle cx="8" cy="13.5" r="1.6"/></svg><span>Neurociencia</span></li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · BEYOND -->
 <section class="beyond" id="beyond" aria-labelledby="h-beyond">
   <span class="big-ring" aria-hidden="true"></span>
   <div class="wrap">
-    <span class="idx sec-num" aria-hidden="true">05</span>
+    <span class="idx sec-num" aria-hidden="true">06</span>
     <div class="reveal">
       <p class="eyebrow">Beyond the pixels</p>
       <h2 class="h2" id="h-beyond">También hago otras <span class="ol">cosas</span><span class="dot">.</span></h2>
@@ -423,10 +497,10 @@ section{position:relative}
   </div>
 </section>
 
-<!-- 06 · NEXT -->
+<!-- 07 · NEXT -->
 <section class="next" id="next" aria-labelledby="h-next">
   <div class="wrap">
-    <span class="idx sec-num" aria-hidden="true">06</span>
+    <span class="idx sec-num" aria-hidden="true">07</span>
     <h2 class="h2 reveal" id="h-next">What’s next?<span class="ln" aria-hidden="true"></span></h2>
     <div class="txt" data-stagger>
       <p>Actualmente también desarrollo <strong>I’m Design</strong>, mi espacio independiente para trabajar en proyectos donde convergen diseño, creatividad, estrategia y tecnología.</p>
