@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>D's — Danny Del Castillo</title>
+<meta name="description" content="Daniela Del Castillo (Danny). Más de 20 años entre diseño, creatividad, tecnología y negocios. La persona detrás de I'm Design.">
+<link rel="canonical" href="https://www.imdesign.cl/ds/">
+<meta property="og:type" content="profile">
+<meta property="og:site_name" content="I'm Design">
+<meta property="og:title" content="D's — Hey, I'm Danny.">
+<meta property="og:description" content="Diseño cosas. Y también cómo hacemos las cosas. La persona detrás de I'm Design.">
+<meta property="og:url" content="https://www.imdesign.cl/ds/">
+<meta property="og:image" content="https://www.imdesign.cl/ds/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="D's. — Danny Del Castillo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="D's — Hey, I'm Danny.">
+<meta name="twitter:description" content="Diseño cosas. Y también cómo hacemos las cosas.">
+<meta name="twitter:image" content="https://www.imdesign.cl/ds/og.png">
+<meta name="theme-color" content="#F4F4F2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-N4WK9QXE2F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-N4WK9QXE2F');
+</script>
+<style>
+/* D's — the person behind I'm Design.
+   Layout: editorial single page; asymmetric 12-col feel, mono labels as the "system" voice,
+   Inter Tight as the expressive voice. One protagonist shape per section. */
+:root{
+  --ink:#161615; --bg:#F4F4F2; --paper:#FBFAF8; --sand:#D5CBBF; --band:#EAE5DE;
+  --or:#F83E1F; --ye:#F8A829; --bl:#013BF6; --muted:#5E5A55; --line:#161615;
+  --sans:"Inter Tight","Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --gut:max(20px,env(safe-area-inset-left,0px));
+  --max:1280px; --ease:cubic-bezier(.2,.8,.2,1);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--bl);outline-offset:3px}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.idx{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-decoration:underline;text-underline-offset:3px}
+.skip{position:absolute;left:12px;top:-60px;background:var(--ink);color:var(--bg);padding:10px 14px;z-index:50;font:500 13px var(--sans)}
+.skip:focus{top:12px}
+
+/* ---------- header ---------- */
+.hdr{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid transparent;transition:border-color .3s}
+.hdr.scrolled{border-bottom-color:rgba(22,22,21,.12)}
+.hdr .wrap{display:flex;align-items:center;gap:32px;height:68px}
+.logo{font:800 30px/1 var(--sans);letter-spacing:-.06em;text-decoration:none}
+.logo b{color:var(--or)}
+.nav{display:flex;gap:28px;margin:0;padding:0;list-style:none}
+.nav a{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-decoration:none;text-transform:uppercase;position:relative;padding:6px 0}
+.nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--ink);transition:right .3s var(--ease)}
+.nav a:hover::after,.nav a[aria-current="true"]::after{right:0}
+.hdr-r{margin-left:auto;display:flex;align-items:center;gap:20px}
+.lnk{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border-bottom:1px solid var(--ink);padding:4px 0}
+.lnk svg,.btn svg{width:12px;height:12px;flex:none;transition:transform .25s var(--ease)}
+.lnk:hover svg{transform:translateX(3px)}
+.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);text-decoration:none;cursor:pointer;min-height:44px}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.hot{background:var(--or);border-color:var(--or);color:#fff}
+.btn:hover svg{transform:translate(2px,-2px)}
+.btn[aria-disabled="true"]{opacity:.42;cursor:not-allowed}
+.btn[aria-disabled="true"]:hover svg{transform:none}
+.menu-btn{display:none;margin-left:auto;background:none;border:1px solid var(--ink);font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:10px 12px;min-height:40px;cursor:pointer;color:var(--ink)}
+
+/* ---------- sections ---------- */
+section{position:relative}
+.sec-head{display:grid;grid-template-columns:56px minmax(0,1fr);gap:0 20px;align-items:start}
+.sec-num{padding-top:14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);margin:0 0 14px;text-transform:uppercase}
+.h2{font:800 clamp(34px,4.6vw,58px)/.98 var(--sans);letter-spacing:-.045em;margin:0;text-wrap:balance}
+.reveal{transition:transform .8s var(--ease),opacity .8s var(--ease)}
+.js .reveal:not(.in){transform:translateY(14px);opacity:.75}
+
+/* ---------- hero ---------- */
+.hero{padding:56px 0 72px}
+.hero .wrap{display:grid;grid-template-columns:56px minmax(0,1.3fr) minmax(0,.8fr);gap:0 20px}
+.hero h1{font:800 clamp(64px,9.2vw,132px)/.86 var(--sans);letter-spacing:-.06em;margin:0 0 36px}
+.hero h1 .dot{color:var(--or)}
+.hero h1 .flip{color:transparent;-webkit-text-stroke:2px var(--ink);transition:color .9s var(--ease) .9s}
+.loaded .hero h1 .flip{color:var(--ink)}
+.hero h1:hover .flip{color:transparent;transition-delay:0s;transition-duration:.35s}
+.hero .copy{max-width:56ch;display:grid;gap:14px;font-size:17px;color:#2A2826}
+.hero .copy p{margin:0}
+.hero .copy .wink{font-weight:500;color:var(--ink)}
+.hero-art{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:28px;align-self:start;margin-top:8px}
+.comp{width:100%;height:auto;overflow:visible}
+.comp .s{transform-box:fill-box;transform-origin:center}
+.loaded .comp .s{animation:inShape .9s var(--ease) both}
+.comp .s1{--dx:-40px;--dy:-60px;animation-delay:.05s!important}
+.comp .s2{--dx:60px;--dy:40px;--r:-14deg;animation-delay:.2s!important}
+.comp .s3{--dx:-30px;--dy:70px;animation-delay:.32s!important}
+@keyframes inShape{from{transform:translate(var(--dx,0),var(--dy,0)) rotate(var(--r,0deg)) scale(.9)}to{transform:none}}
+.comp .ring{transition:fill .5s var(--ease)}
+.hero-art:hover .comp .ring{fill:var(--or)}
+.side{border-left:1px solid var(--ink);padding-left:20px;display:flex;flex-direction:column;justify-content:space-between;min-height:100%}
+.side ul{list-style:none;margin:0;padding:0;text-transform:uppercase;font-family:var(--mono);font-size:13px;letter-spacing:.06em;line-height:1.7}
+.side p{margin:40px 0 0;text-transform:uppercase;font-family:var(--mono);font-size:12px;letter-spacing:.08em;line-height:1.6}
+
+/* ---------- work ---------- */
+.work{background:var(--band);padding:64px 0 0}
+.work-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px 48px;align-items:end;padding-bottom:44px}
+.work-top p{margin:0;max-width:46ch;color:#3A3734}
+.cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid rgba(22,22,21,.15);background:var(--bg)}
+.card{border-right:1px solid rgba(22,22,21,.12);border-bottom:1px solid rgba(22,22,21,.12);margin:0}
+.card:nth-of-type(6n){border-right:0}
+.card-btn{all:unset;box-sizing:border-box;display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;width:100%;height:100%;min-height:300px;padding:22px 20px 20px;cursor:pointer;position:relative;transition:background .3s var(--ease)}
+.card-btn:hover,.card-btn[aria-expanded="true"]{background:var(--paper)}
+.card-btn:focus-visible{outline:2px solid var(--bl);outline-offset:-4px}
+.card .n{font-family:var(--mono);font-size:11px;letter-spacing:.04em}
+.card .t{font:700 18px/1.12 var(--sans);letter-spacing:-.025em;text-wrap:balance}
+.glyph{width:100%;max-width:150px;height:96px;align-self:center;overflow:visible}
+.glyph .m{transition:fill .35s var(--ease),stroke .35s var(--ease)}
+.card-btn:hover .glyph .m,.card-btn[aria-expanded="true"] .glyph .m{fill:transparent;stroke-width:1.5}
+.card-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.card .tags{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;line-height:1.6;color:#3A3734}
+.tog{flex:none;width:30px;height:30px;border:1px solid var(--ink);border-radius:50%;display:grid;place-items:center;transition:background .3s var(--ease),color .3s,transform .4s var(--ease)}
+.tog svg{width:12px;height:12px}
+.card-btn:hover .tog{transform:rotate(90deg)}
+.card-btn[aria-expanded="true"] .tog{background:var(--ink);color:var(--bg);transform:rotate(45deg)}
+
+/* panel: grid-row trick animates height without measuring */
+.panel{grid-column:1/-1;display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease),visibility 0s linear .45s;visibility:hidden;background:var(--paper)}
+.panel.open{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .45s var(--ease),visibility 0s}
+.panel>.pin{overflow:hidden;min-height:0}
+.pbody{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.35fr) minmax(0,1fr);gap:40px 56px;padding:48px 40px 56px;border-bottom:1px solid rgba(22,22,21,.12);opacity:0;transform:translateY(10px);transition:opacity .35s,transform .45s var(--ease)}
+.panel.open .pbody{opacity:1;transform:none;transition-delay:.12s}
+.pbody h3{font:800 clamp(30px,3.4vw,44px)/1 var(--sans);letter-spacing:-.045em;margin:10px 0 18px;text-wrap:balance}
+.pbody .tags{font-family:var(--mono);font-size:12px;letter-spacing:.04em;line-height:1.7}
+.pbody .rule{width:56px;height:1px;background:var(--ink);margin-top:28px}
+.ptext{display:grid;gap:14px;align-content:start;max-width:62ch}
+.ptext p{margin:0;color:#2A2826}
+.fact{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;display:flex;flex-wrap:wrap;gap:6px 16px;padding:12px 0;border-top:1px solid var(--ink);border-bottom:1px solid rgba(22,22,21,.15)}
+.pull{font:700 clamp(19px,1.8vw,24px)/1.22 var(--sans);letter-spacing:-.02em;color:var(--ink)!important;margin-top:6px!important}
+.pull.q::before{content:"";display:block;width:24px;height:2px;background:var(--or);margin-bottom:12px}
+.pvis{align-self:center}
+.pvis svg{width:100%;height:auto;max-height:280px;overflow:visible}
+.pvis .a{opacity:0;transform:translateY(8px);transform-box:fill-box;transition:opacity .5s var(--ease),transform .6s var(--ease)}
+.panel.open .pvis .a{opacity:1;transform:none}
+.pvis .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;fill:var(--ink)}
+
+/* ---------- think ---------- */
+.think{padding:80px 0;border-top:1px solid rgba(22,22,21,.12)}
+.think .wrap{display:grid;grid-template-columns:56px minmax(0,.9fr) minmax(0,2.1fr);gap:0 20px;align-items:start}
+.qs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid var(--ink)}
+.qs li{padding:6px 20px 28px 0;position:relative}
+.qs li+li{padding-left:20px;border-left:1px solid rgba(22,22,21,.15)}
+.qs .k{font-family:var(--mono);font-size:10.5px;color:var(--muted);display:block;margin-bottom:12px}
+.qs p{margin:0;font:500 17px/1.3 var(--sans);letter-spacing:-.01em;transition:color .3s}
+.qs li::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--or);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.qs li+li::after{left:0}
+.qs li:hover::after{transform:scaleX(1)}
+
+/* ---------- road ---------- */
+.road{padding:80px 0;border-top:1px solid rgba(22,22,21,.12)}
+.road .wrap{display:grid;grid-template-columns:56px minmax(0,1fr) minmax(0,2.1fr);gap:0 32px}
+.road .h2,.think .h2{font-size:clamp(32px,3.6vw,48px)}
+.tl{display:grid;grid-template-columns:.7fr 1.2fr 1fr 1.25fr 1fr;gap:0 16px}
+.tl .it{display:flex;flex-direction:column;gap:10px;min-width:0}
+.tl .yr{font-family:var(--mono);font-size:11px;letter-spacing:.04em}
+.tl .bar{height:10px;border-radius:6px;transform-origin:left;transition:transform 1s var(--ease)}
+.js .tl:not(.in) .bar{transform:scaleX(.08)}
+.tl .org{font:700 15px/1.2 var(--sans);letter-spacing:-.015em;margin-top:6px}
+.tl .roles{list-style:none;margin:0;padding:0;font-size:13px;line-height:1.45;color:#3A3734}
+.tl .roles span{font-family:var(--mono);font-size:10.5px;color:var(--muted);display:block}
+.tl .roles li+li{margin-top:6px}
+.par{grid-column:4/6;margin-top:34px;display:flex;flex-direction:column;gap:10px}
+.par .dash{height:0;border-top:2px dotted var(--ink);position:relative;margin:4px 0}
+.par .dash::before,.par .dash::after{content:"";position:absolute;top:-6px;width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.par .dash::before{left:28%}.par .dash::after{right:0}
+.par .tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted)}
+
+/* ---------- beyond ---------- */
+.beyond{background:var(--ink);color:#EDEAE6;padding:96px 0 104px;overflow:hidden}
+.beyond .wrap{display:grid;grid-template-columns:56px minmax(0,.9fr) minmax(0,1.3fr) minmax(0,.6fr);gap:0 20px;position:relative;z-index:1}
+.beyond .idx{color:#EDEAE6}
+.beyond .eyebrow{color:#A8A39C}
+.beyond .h2{font-size:clamp(46px,6vw,80px);color:#fff}
+.beyond .ol{color:transparent;-webkit-text-stroke:1.5px #fff;transition:color .5s var(--ease)}
+.beyond .h2:hover .ol{color:#fff}
+.beyond .h2 .dot{color:var(--or);-webkit-text-stroke:0}
+.btext{display:grid;gap:16px;max-width:54ch;font-size:16.5px}
+.btext p{margin:0}
+.btext .last{color:#A8A39C}
+.big-ring{position:absolute;right:-200px;bottom:-300px;width:min(600px,70vw);aspect-ratio:1;border:1.5px solid #EDEAE6;border-radius:50%;opacity:.9;pointer-events:none}
+.beyond-media:empty{display:none}
+
+/* ---------- next ---------- */
+.next{padding:80px 0 96px}
+.next .wrap{display:grid;grid-template-columns:56px minmax(0,.8fr) minmax(0,1.3fr) auto;gap:24px 20px;align-items:start}
+.next .h2 .ln{display:block;width:130px;height:0;border-top:1.5px solid var(--ink);margin-top:20px}
+.next .txt{display:grid;gap:12px;max-width:52ch}
+.next .txt p{margin:0}
+.acts{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+.cv-note{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);margin:8px 0 0;width:100%;text-align:right}
+.ftr{border-top:1px solid rgba(22,22,21,.15);padding:22px 0 calc(22px + env(safe-area-inset-bottom,0px))}
+.ftr .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.ftr a{text-decoration:none;border-bottom:1px solid currentColor}
+
+/* ---------- responsive ---------- */
+@media (max-width:1180px){
+  .cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .card:nth-of-type(6n){border-right:1px solid rgba(22,22,21,.12)}
+  .card:nth-of-type(3n){border-right:0}
+  .qs{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:24px}
+  .qs li:nth-child(4){padding-left:0;border-left:0}
+  .think .wrap,.road .wrap{grid-template-columns:56px minmax(0,1fr)}
+  .think .wrap>.qs-wrap,.road .wrap>.tl-wrap{grid-column:2;margin-top:40px}
+}
+@media (max-width:980px){
+  .nav{display:none}
+  .menu-btn{display:inline-flex}
+  .hdr-r{margin-left:0}
+  .nav.open{display:flex;position:absolute;top:68px;left:0;right:0;flex-direction:column;gap:0;background:var(--bg);border-bottom:1px solid var(--ink);padding:8px max(20px,env(safe-area-inset-left,0px)) 16px}
+  .nav.open a{display:block;padding:14px 0;border-bottom:1px solid rgba(22,22,21,.1)}
+  .hero .wrap{grid-template-columns:40px minmax(0,1fr)}
+  .hero-art{grid-column:2;margin-top:48px;grid-template-columns:minmax(0,1fr) 150px}
+  .pbody{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);padding:40px 28px 48px}
+  .pvis{grid-column:1/-1;max-width:420px}
+  .work-top{grid-template-columns:1fr}
+  .beyond .wrap{grid-template-columns:40px minmax(0,1fr)}
+  .beyond .btext{grid-column:2;margin-top:32px}
+  .next .wrap{grid-template-columns:40px minmax(0,1fr)}
+  .next .txt,.next .acts{grid-column:2}
+  .cv-note{text-align:left}
+  .sec-head{grid-template-columns:40px minmax(0,1fr)}
+  .think .wrap,.road .wrap{grid-template-columns:40px minmax(0,1fr)}
+}
+@media (max-width:720px){
+  .hdr .lnk{display:none}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card:nth-of-type(3n){border-right:1px solid rgba(22,22,21,.12)}
+  .card:nth-of-type(2n){border-right:0}
+  .card-btn{min-height:250px;padding:18px 16px}
+  .pbody{grid-template-columns:1fr;gap:28px;padding:32px 20px 40px}
+  .qs{grid-template-columns:1fr}
+  .qs li,.qs li+li{padding:18px 0;border-left:0;border-top:1px solid rgba(22,22,21,.15)}
+  .qs p{font-size:19px}
+  .tl{grid-template-columns:1fr;gap:0}
+  .tl .it{display:grid;grid-template-columns:10px minmax(0,1fr);gap:4px 16px;padding-bottom:26px}
+  .tl .it .bar{grid-row:1/span 4;width:10px;height:auto;min-height:100%;transform-origin:top}
+  .js .tl:not(.in) .bar{transform:scaleY(.1)}
+  .tl .it>*:not(.bar){grid-column:2}
+  .tl .org{margin-top:0}
+  .par{grid-column:1;margin-top:4px;padding-left:26px;border-left:2px dotted var(--ink)}
+  .par .dash{display:none}
+  .hero-art{grid-template-columns:1fr}
+  .side{border-left:0;border-top:1px solid var(--ink);padding:18px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .side p{margin:0}
+  .big-ring{width:120vw;right:-70vw;opacity:.6}
+  .hero h1{font-size:clamp(56px,17vw,96px)}
+}
+@media (max-width:440px){
+  .cards{grid-template-columns:1fr}
+  .card{border-right:0!important}
+  .card-btn{min-height:0;grid-template-columns:minmax(0,1fr) 110px;grid-template-rows:auto auto auto;column-gap:12px}
+  .card .glyph{grid-column:2;grid-row:1/span 3;height:80px}
+  .card-foot{grid-column:1}
+  .hero .wrap,.sec-head,.think .wrap,.road .wrap,.beyond .wrap,.next .wrap{grid-template-columns:28px minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}
+  .js .reveal:not(.in),.js .tl:not(.in) .bar{transform:none;opacity:1}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="logo" href="#about" aria-label="D's, inicio">D’s<b>.</b></a>
+    <nav aria-label="Secciones">
+      <ul class="nav" id="nav">
+        <li><a href="#about">01. About</a></li>
+        <li><a href="#work">02. Work</a></li>
+        <li><a href="#think">03. Think</a></li>
+        <li><a href="#road">04. Experience</a></li>
+        <li><a href="#beyond">05. Beyond</a></li>
+      </ul>
+    </nav>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">MENU</button>
+    <div class="hdr-r">
+      <a class="lnk" href="/">I’m Design <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4"/></svg></a>
+      <a class="btn cv" href="#" aria-disabled="true" title="CV disponible pronto">CV <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 1v10M2 7l4 4 4-4"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- 01 · HERO -->
+<section class="hero" id="about" aria-labelledby="h-hero">
+  <div class="wrap">
+    <span class="idx sec-num" aria-hidden="true">01</span>
+    <div>
+      <h1 id="h-hero">Hey,<br>I’m <span class="flip">Danny</span><span class="dot">.</span></h1>
+      <div class="copy">
+        <p>Soy Daniela Del Castillo. Llevo más de 20 años trabajando entre diseño, creatividad, tecnología y negocios.</p>
+        <p>Comencé en la comunicación visual. Después llegaron las experiencias digitales, los productos, los servicios, la estrategia y el liderazgo de equipos.</p>
+        <p>Hoy trabajo en problemas que necesitan distintas miradas. A veces diseño una experiencia, otras veces una metodología, una estrategia o una manera de organizar el trabajo.</p>
+        <p>Me gusta entender cómo funcionan las cosas, encontrar conexiones inesperadas y explorar ideas que todavía no sabemos muy bien cómo llevar a la práctica.</p>
+        <p class="wink">Y sí, todavía me entusiasma una buena tipografía.</p>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg class="comp" viewBox="0 0 400 420" aria-hidden="true">
+        <rect class="s s1" x="120" y="12" width="168" height="230" fill="none" stroke="#013BF6" stroke-width="2.5"/>
+        <rect class="s s3" x="214" y="170" width="150" height="232" fill="#D5CBBF"/>
+        <circle class="s s2 ring" cx="160" cy="250" r="128" fill="#F83E1F"/>
+      </svg>
+      <div class="side">
+        <ul><li>Diseño</li><li>Experiencias</li><li>Equipos</li><li>Ideas</li><li>Maneras de</li><li>hacer las cosas</li></ul>
+        <p>Same brain.<br>More questions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 · WORK -->
+<section class="work" id="work" aria-labelledby="h-work">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="idx sec-num" aria-hidden="true">02</span>
+      <div class="work-top reveal">
+        <div>
+          <p class="eyebrow">What I’ve done</p>
+          <h2 class="h2" id="h-work">Diseño cosas.<br>Y también cómo hacemos las cosas.</h2>
+        </div>
+        <p>He trabajado diseñando productos digitales, construyendo equipos, desarrollando metodologías y ayudando a organizaciones a tomar mejores decisiones. Estos son algunos de los desafíos en los que he participado.</p>
+      </div>
+    </div>
+  </div>
+  <div class="cards" id="cards"></div>
+</section>
+
+<!-- 03 · THINK -->
+<section class="think" id="think" aria-labelledby="h-think">
+  <div class="wrap">
+    <span class="idx sec-num" aria-hidden="true">03</span>
+    <div class="reveal">
+      <p class="eyebrow">How I work</p>
+      <h2 class="h2" id="h-think">Algunas preguntas que me acompañan.</h2>
+    </div>
+    <div class="qs-wrap reveal">
+      <ol class="qs">
+        <li><span class="k">01</span><p>¿Estamos resolviendo el problema correcto?</p></li>
+        <li><span class="k">02</span><p>¿Qué sabemos y qué estamos suponiendo?</p></li>
+        <li><span class="k">03</span><p>¿Podría ser más simple?</p></li>
+        <li><span class="k">04</span><p>¿Cómo sabremos si funcionó?</p></li>
+        <li><span class="k">05</span><p>¿Y después?</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · ROAD -->
+<section class="road" id="road" aria-labelledby="h-road">
+  <div class="wrap">
+    <span class="idx sec-num" aria-hidden="true">04</span>
+    <div class="reveal">
+      <p class="eyebrow">The road so far</p>
+      <h2 class="h2" id="h-road">De la dirección de arte al diseño de experiencias. Y bastante más.</h2>
+    </div>
+    <div class="tl-wrap">
+      <ol class="tl reveal" role="list">
+        <li class="it"><span class="yr">2008</span><span class="bar" style="background:#D5CBBF" aria-hidden="true"></span><span class="org">Travel Club</span><ul class="roles"><li>Diseñadora</li></ul></li>
+        <li class="it"><span class="yr">2009 – 2015</span><span class="bar" style="background:#161615" aria-hidden="true"></span><span class="org">Agencia Digital Cardumen</span>
+          <ul class="roles"><li><span>2009 – 2013</span>Directora de Arte</li><li><span>2013 – 2014</span>Directora Creativa</li><li><span>2014 – 2015</span>Directora de Creatividad &amp; Estrategia</li></ul></li>
+        <li class="it"><span class="yr">2015 – 2019</span><span class="bar" style="background:#013BF6" aria-hidden="true"></span><span class="org">LATAM Airlines</span><ul class="roles"><li>UX Expert Designer</li><li>Mentora</li></ul></li>
+        <li class="it"><span class="yr">2019 – 2024</span><span class="bar" style="background:#F83E1F" aria-hidden="true"></span><span class="org">Multiplica</span>
+          <ul class="roles"><li><span>2019 – 2021</span>Experience Lead</li><li><span>2021 – 2023</span>Head of Excellence &amp; Innovation</li><li><span>2023 – 2024</span>Global Head of Experience</li></ul></li>
+        <li class="it"><span class="yr">2024 – Actualidad</span><span class="bar" style="background:#F8A829" aria-hidden="true"></span><span class="org">Thoughtworks</span><ul class="roles"><li>Experience Designer</li><li>Lead Consultant</li></ul></li>
+        <li class="par"><span class="tag">En paralelo · docencia</span><span class="dash" aria-hidden="true"></span><span class="yr">2023 – Actualidad</span><span class="org">IEBS Business School</span><ul class="roles"><li>Profesora de Diseño de Interfaces</li></ul></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · BEYOND -->
+<section class="beyond" id="beyond" aria-labelledby="h-beyond">
+  <span class="big-ring" aria-hidden="true"></span>
+  <div class="wrap">
+    <span class="idx sec-num" aria-hidden="true">05</span>
+    <div class="reveal">
+      <p class="eyebrow">Beyond the pixels</p>
+      <h2 class="h2" id="h-beyond">También hago otras <span class="ol">cosas</span><span class="dot">.</span></h2>
+    </div>
+    <div class="btext reveal">
+      <p>Escribo cuentos un poco extraños. En uno de ellos, alguien termina guardando sus pestañas en una bolsa Ziploc.</p>
+      <p>Me gusta ilustrar, pintar y experimentar con materiales. Puedo pasar bastante tiempo buscando un papel, una técnica o un color específico.</p>
+      <p>Juego fútbol. También videojuegos. Y me tomo ambas cosas probablemente más en serio de lo necesario.</p>
+      <p>Me gustan los libros, la música, la tecnología y aprender cosas que no necesariamente tienen relación con mi trabajo.</p>
+      <p>A veces empiezo a investigar algo por una pregunta pequeña y termino varias horas después en un tema completamente distinto.</p>
+      <p class="last">No siempre sale algo útil de eso.</p>
+    </div>
+    <!-- Espacio preparado para ilustraciones, pinturas o fotos reales: agregar <figure> aquí y se mostrará. -->
+    <div class="beyond-media"></div>
+  </div>
+</section>
+
+<!-- 06 · NEXT -->
+<section class="next" id="next" aria-labelledby="h-next">
+  <div class="wrap">
+    <span class="idx sec-num" aria-hidden="true">06</span>
+    <h2 class="h2 reveal" id="h-next">What’s next?<span class="ln" aria-hidden="true"></span></h2>
+    <div class="txt reveal">
+      <p>Actualmente también desarrollo <strong>I’m Design</strong>, mi espacio independiente para trabajar en proyectos donde convergen diseño, creatividad, estrategia y tecnología.</p>
+      <p>Todavía tengo varias ideas dando vueltas.<br>Algunas ya están tomando forma.</p>
+    </div>
+    <div class="acts">
+      <a class="btn hot" href="/">Explore I’m Design <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 10L10 2M4 2h6v6"/></svg></a>
+      <a class="btn ghost cv" href="#" aria-disabled="true" aria-describedby="cvnote">Download my CV <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 1v10M2 7l4 4 4-4"/></svg></a>
+      <p class="cv-note" id="cvnote">CV disponible pronto</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap"><span>D’s. — The person behind I’m Design</span><a href="/">Back to I’m Design</a></div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js');
+/* ---------- CV: set the file path when the PDF exists (e.g. '/ds/cv.pdf') ---------- */
+const CV_URL=null;
+document.querySelectorAll('.cv').forEach(a=>{
+  if(CV_URL){a.href=CV_URL;a.setAttribute('download','');a.removeAttribute('aria-disabled');a.removeAttribute('title');a.removeAttribute('aria-describedby')}
+  else a.addEventListener('click',e=>e.preventDefault());
+});
+if(CV_URL)document.getElementById('cvnote').remove();
+
+/* ---------- cards data (content from the brief) ---------- */
+const K='#161615',S='#D5CBBF',O='#F83E1F',Y='#F8A829',B='#013BF6';
+const CARDS=[
+ {n:'01',t:'Diseñar el crecimiento de otros diseñadores.',tags:['Design Leadership','Talent Development'],
+  glyph:`<circle cx="52" cy="48" r="30" fill="${S}"/><circle class="m" cx="92" cy="48" r="30" fill="${O}" stroke="${O}"/>`,
+  fact:['2025','Performance Partner','5 diseñadoras'],
+  body:['En Multiplica desarrollé y lideré la implementación de un plan de carrera para profesionales de UX, UI, UX Writing, Product Design y Service Design.',
+        'Definimos roles, expectativas, criterios de evaluación y mecanismos de desarrollo profesional para distintas especialidades.',
+        'También he acompañado a profesionales y líderes mediante mentorías, evaluaciones de desempeño y procesos de selección.',
+        'En 2025 fui Performance Partner de cinco diseñadoras, acompañando sus procesos de desarrollo profesional.'],
+  vis:`<path class="a" d="M20 200 C 90 190, 120 120, 170 100 S 260 40, 290 30" fill="none" stroke="${K}" stroke-width="1.2" stroke-dasharray="3 5"/>
+       <circle class="a" cx="40" cy="196" r="22" fill="${S}"/><circle class="a" cx="92" cy="170" r="12" fill="none" stroke="${K}" style="transition-delay:.08s"/>
+       <circle class="a" cx="150" cy="112" r="16" fill="none" stroke="${K}" style="transition-delay:.14s"/><circle class="a" cx="212" cy="72" r="22" fill="none" stroke="${K}" style="transition-delay:.2s"/>
+       <circle class="a" cx="276" cy="34" r="30" fill="${O}" style="transition-delay:.28s"/>`},
+ {n:'02',t:'Encontrar mejores maneras de trabajar.',tags:['DesignOps','Process Design'],
+  glyph:`<rect class="m" x="34" y="12" width="46" height="46" fill="${B}" stroke="${B}"/><rect x="62" y="40" width="48" height="48" fill="none" stroke="${K}" stroke-width="1.2"/>`,
+  pull:'Me gusta trabajar con metodologías. También cuestionarlas cuando dejan de ser útiles.',
+  body:['He diseñado y adaptado metodologías para equipos de experiencia con necesidades y formas de trabajo muy distintas.',
+        'En Thoughtworks trabajé en la estructuración de procesos de diseño, mejoras al onboarding y creación de herramientas para organizar el trabajo y documentar decisiones.',
+        'También he desarrollado enfoques que conectan microdiscovery, definición y delivery, incorporando actividades de investigación y validación al desarrollo de productos.'],
+  vis:`<rect class="a" x="20" y="40" width="70" height="70" fill="${B}"/><rect class="a" x="120" y="40" width="70" height="70" fill="none" stroke="${K}" style="transition-delay:.1s"/>
+       <rect class="a" x="220" y="40" width="70" height="70" fill="none" stroke="${K}" style="transition-delay:.2s"/>
+       <path class="a" d="M90 75h30M190 75h30" stroke="${K}" style="transition-delay:.15s"/><path class="a" d="M255 110v50H55v-50" fill="none" stroke="${K}" stroke-dasharray="3 5" style="transition-delay:.3s"/>
+       <text class="a lbl" x="20" y="134">MICRODISCOVERY</text><text class="a lbl" x="120" y="134">DEFINICIÓN</text><text class="a lbl" x="220" y="134">DELIVERY</text>`},
+ {n:'03',t:'Hacer comprensible lo complejo.',tags:['Product Design','Enterprise UX'],
+  glyph:`<path d="M75 10a38 38 0 0 1 0 76z" fill="${S}"/><path class="m" d="M75 10a38 38 0 0 0 0 76z" fill="${K}" stroke="${K}"/>`,
+  pull:'A veces el desafío está en simplificar. Otras veces, en descubrir qué complejidad necesitamos conservar.',
+  body:['Parte de mi experiencia reciente se ha desarrollado en productos digitales especializados, donde entender el negocio requiere aprender sobre procesos, reglas e información que inicialmente pueden resultar bastante ajenos al diseño.',
+        'He trabajado en iniciativas relacionadas con mantenimiento y confiabilidad aeronáutica, abordando desafíos de visualización de información, análisis de indicadores y seguimiento de decisiones.',
+        'Esto ha implicado colaborar con especialistas, comprender modelos de información y diseñar experiencias para personas que necesitan interpretar datos y actuar sobre ellos.'],
+  vis:(()=>{const L=[['CONTEXTO',S],['INFORMACIÓN',O],['DISEÑO',B],['DECISIÓN',K]];return L.map(([l,c],i)=>{const y=30+i*48;
+       return `<g class="a" style="transition-delay:${i*.09}s"><path d="M110 ${y} L190 ${y+34} L110 ${y+68} L30 ${y+34}Z" fill="${c}"/><path d="M190 ${y+34}H226" stroke="${K}" stroke-width="1"/><circle cx="226" cy="${y+34}" r="2" fill="${K}"/><text class="lbl" x="234" y="${y+37}">${l}</text></g>`}).reverse().join('')})()},
+ {n:'04',t:'Investigar antes de decidir.',tags:['UX Research','Product Discovery'],
+  glyph:`<path d="M30 14v72M48 14v72M66 14v72M84 14v72" stroke="${K}" stroke-width="1.2"/><circle class="m" cx="118" cy="44" r="14" fill="${O}" stroke="${O}"/>`,
+  pull:'Una pregunta que aparece bastante en mi trabajo es: ¿esto lo sabemos o lo estamos suponiendo?',q:true,
+  body:['He realizado entrevistas, encuestas, pruebas de usabilidad, card sorting, evaluaciones heurísticas y análisis de información cualitativa.',
+        'En proyectos como Lenovo participé en actividades de investigación, priorización de necesidades y validación de versiones MVP.',
+        'También he creado plantillas y herramientas para incorporar estas prácticas al trabajo cotidiano de los equipos.'],
+  vis:(()=>{let g='';const ys=[60,150,95,170,70,130,105,85,160,120];ys.forEach((y,i)=>{const x=24+i*28;
+       g+=`<path class="a" d="M${x} 20V200" stroke="${K}" stroke-width=".8" opacity=".35" style="transition-delay:${i*.03}s"/><circle class="a" cx="${x}" cy="${y}" r="${i===5?11:4}" fill="${i===5?O:K}" style="transition-delay:${.1+i*.04}s"/>`});
+       return g+`<path class="a" d="M24 60 L80 95 L136 70 L164 130 L220 85 L276 120" fill="none" stroke="${O}" stroke-width="1.2" stroke-dasharray="2 4" style="transition-delay:.5s"/>`})()},
+ {n:'05',t:'Conectar diseño con resultados.',tags:['UX Metrics','CRO','Business Impact'],
+  glyph:`<path class="m" d="M70 14a38 38 0 0 0 0 76z" fill="${Y}" stroke="${Y}"/><rect x="78" y="44" width="16" height="46" fill="${K}"/><rect x="100" y="24" width="16" height="66" fill="${K}"/>`,
+  fact:['2025','Charla','Del criterio a la evidencia'],
+  pull:'Me interesa especialmente lo que ocurre después de implementar una solución. Ahí aparecen muchas respuestas que el prototipo no podía darnos.',
+  body:['He trabajado en iniciativas de optimización de conversión y colaborado con equipos de analítica digital para incorporar indicadores a las decisiones de diseño.',
+        'También he desarrollado contenidos sobre medición de experiencias, desde métricas de percepción y usabilidad hasta indicadores de producto y negocio.',
+        'En 2025 preparé <em>Del criterio a la evidencia</em>, una charla sobre cómo relacionar las decisiones de diseño con resultados observables.'],
+  vis:`<path class="a" d="M120 30a85 85 0 0 0 0 170z" fill="${Y}"/><circle class="a" cx="120" cy="115" r="85" fill="none" stroke="${K}" stroke-dasharray="3 5" style="transition-delay:.1s"/>
+       <rect class="a" x="150" y="130" width="22" height="70" fill="${K}" style="transition-delay:.18s"/><rect class="a" x="180" y="100" width="22" height="100" fill="${K}" style="transition-delay:.24s"/><rect class="a" x="210" y="60" width="22" height="140" fill="none" stroke="${K}" style="transition-delay:.3s"/>
+       <text class="a lbl" x="150" y="222">CRITERIO → EVIDENCIA</text>`},
+ {n:'06',t:'Experimentar con nuevas herramientas.',tags:['AI','Design Workflows','Automation'],
+  glyph:`<circle class="m" cx="56" cy="50" r="34" fill="${B}" stroke="${B}"/><path d="M80 90L140 14" stroke="${K}" stroke-width="1.2"/>`,
+  fact:['2025','4 asistentes GPT'],
+  pull:'Todavía estoy descubriendo qué funciona, qué no y dónde realmente vale la pena utilizarlas.',
+  body:['He incorporado herramientas de inteligencia artificial a actividades de investigación, documentación, planificación y diseño.',
+        'En 2025 desarrollé cuatro asistentes GPT especializados en experiencia de usuario, metodologías ágiles, diseño general y un producto digital específico.',
+        'También he explorado su aplicación en análisis de transcripciones, síntesis de investigaciones, organización de conocimiento y creación de documentación.',
+        'Actualmente experimento con desarrollo asistido por IA, automatizaciones y herramientas que permiten conectar diseño y tecnología de nuevas maneras.'],
+  vis:`<circle class="a" cx="60" cy="110" r="44" fill="${B}"/><path class="a" d="M104 110H150" stroke="${K}" style="transition-delay:.1s"/>
+       <rect class="a" x="150" y="78" width="64" height="64" fill="none" stroke="${K}" transform="rotate(45 182 110)" style="transition-delay:.18s"/>
+       <path class="a" d="M214 110H240" stroke="${K}" style="transition-delay:.24s"/><rect class="a" x="240" y="86" width="48" height="48" fill="${K}" style="transition-delay:.3s"/>
+       <path class="a" d="M20 210L300 20" stroke="${K}" stroke-width=".8" stroke-dasharray="3 6" style="transition-delay:.36s"/>`}
+];
+const plus='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 1v10M1 6h10"/></svg>';
+const cardsEl=document.getElementById('cards');
+cardsEl.innerHTML=CARDS.map((c,i)=>`
+ <article class="card" style="order:${i*2}">
+  <h3 style="margin:0;height:100%"><button class="card-btn" type="button" id="cb-${c.n}" aria-expanded="false" aria-controls="p-${c.n}">
+   <span class="n">${c.n}</span><span class="t">${c.t}</span>
+   <svg class="glyph" viewBox="0 0 150 100" aria-hidden="true">${c.glyph}</svg>
+   <span class="card-foot"><span class="tags">${c.tags.join('<br>')}</span><span class="tog">${plus}</span></span>
+  </button></h3>
+ </article>
+ <div class="panel" id="p-${c.n}" role="region" aria-labelledby="cb-${c.n}" style="order:${i*2+1}">
+  <div class="pin"><div class="pbody">
+   <div><span class="n mono">${c.n}</span><h3>${c.t}</h3><div class="tags">${c.tags.join('<br>')}</div><div class="rule"></div></div>
+   <div class="ptext">${c.fact?`<div class="fact">${c.fact.map(f=>`<span>${f}</span>`).join('<span aria-hidden="true">·</span>')}</div>`:''}
+     ${c.body.map(p=>`<p>${p}</p>`).join('')}${c.pull?`<p class="pull${c.q?' q':''}">${c.pull}</p>`:''}</div>
+   <div class="pvis"><svg viewBox="0 0 310 240" aria-hidden="true">${c.vis}</svg></div>
+  </div></div>
+ </div>`).join('');
+
+/* ---------- expand / collapse: one open at a time, panel placed after the card's row ---------- */
+const btns=[...cardsEl.querySelectorAll('.card-btn')], panels=[...cardsEl.querySelectorAll('.panel')];
+let openIdx=-1;
+const cols=()=>getComputedStyle(cardsEl).gridTemplateColumns.split(' ').length;
+function place(){panels.forEach((p,i)=>{const c=cols(),rowEnd=Math.min(CARDS.length-1,Math.floor(i/c)*c+c-1);p.style.order=rowEnd*2+1})}
+function setOpen(i){
+  btns.forEach((b,j)=>{const on=j===i;b.setAttribute('aria-expanded',on);panels[j].classList.toggle('open',on);panels[j].inert=!on});
+  openIdx=i;
+  if(i>=0)setTimeout(()=>{const r=panels[i].getBoundingClientRect();if(r.top>innerHeight-120||r.top<70)
+    panels[i].scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'})},480);
+}
+btns.forEach((b,i)=>b.addEventListener('click',()=>setOpen(openIdx===i?-1:i)));
+panels.forEach(p=>p.inert=true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openIdx>=0){const b=btns[openIdx];setOpen(-1);b.focus()}});
+place();addEventListener('resize',place);
+
+/* ---------- mobile menu ---------- */
+const mb=document.querySelector('.menu-btn'),nav=document.getElementById('nav');
+mb.addEventListener('click',()=>{const o=nav.classList.toggle('open');mb.setAttribute('aria-expanded',o);mb.textContent=o?'CLOSE':'MENU'});
+nav.addEventListener('click',e=>{if(e.target.closest('a')&&nav.classList.contains('open')){nav.classList.remove('open');mb.setAttribute('aria-expanded','false');mb.textContent='MENU'}});
+
+/* ---------- header state, active section, gentle reveals ---------- */
+const hdr=document.querySelector('.hdr');
+addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>8),{passive:true});
+const links=[...document.querySelectorAll('.nav a')];
+if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.setAttribute('aria-current',a.getAttribute('href')==='#'+e.target.id?'true':'false'))}}),{rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('main section[id]').forEach(s=>so.observe(s));
+}else document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+requestAnimationFrame(()=>document.documentElement.classList.add('loaded'));
+</script>
+</body>
+</html>
