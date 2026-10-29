@@ -94,8 +94,8 @@ section{position:relative}
 .hero h1{font:800 clamp(64px,9.2vw,132px)/.86 var(--sans);letter-spacing:-.06em;margin:0 0 52px}
 .hero h1 .dot{color:var(--or)}
 .hero h1 .flip{color:var(--bg);-webkit-text-stroke:4px var(--ink);paint-order:stroke fill;transition:color .9s var(--ease) .9s}
-.loaded .hero h1 .flip{color:var(--ink)}
-.hero h1:hover .flip{color:var(--bg);transition-delay:0s;transition-duration:.35s}
+.loaded .hero h1 .flip{color:var(--ink);-webkit-text-stroke-width:0;transition:color .9s var(--ease) .9s,-webkit-text-stroke-width 0s 1.8s}
+.hero h1:hover .flip{color:var(--bg);-webkit-text-stroke-width:4px;transition-delay:0s;transition-duration:.35s}
 .hero .copy{max-width:56ch;display:grid;gap:18px;font-size:17px;color:#2A2826}
 .hero .copy p{margin:0}
 .hero .copy .wink{font-weight:500;color:var(--ink)}
@@ -121,10 +121,13 @@ section{position:relative}
 .side p{margin:40px 0 0;text-transform:uppercase;font-family:var(--mono);font-size:12px;letter-spacing:.08em;line-height:1.6}
 
 /* ---------- work ---------- */
-.work{background:var(--band);padding:var(--sp) 0 0}
+.work{background:var(--band);padding:var(--sp) 0 var(--sp)}
 .work-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px 48px;align-items:end;padding-bottom:clamp(56px,6vw,88px)}
 .work-top p{margin:0;max-width:46ch;color:#3A3734}
-.cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid rgba(22,22,21,.15);background:var(--bg)}
+.work-intro{display:grid;gap:22px}
+.hint{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px!important;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)!important}
+.hint-plus{flex:none;width:26px;height:26px;border-radius:50%;background:var(--or);color:#fff;display:grid;place-items:center;font:500 16px/1 var(--sans);letter-spacing:0}
+.cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));background:var(--bg);border:1px solid rgba(22,22,21,.15);box-shadow:0 1px 0 rgba(22,22,21,.04)}
 .card{border-right:1px solid rgba(22,22,21,.12);border-bottom:1px solid rgba(22,22,21,.12);margin:0}
 .card:nth-of-type(6n){border-right:0}
 .card-btn{all:unset;box-sizing:border-box;display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;width:100%;height:100%;min-height:300px;padding:22px 20px 20px;cursor:pointer;position:relative;transition:background .3s var(--ease)}
@@ -140,6 +143,12 @@ section{position:relative}
 .tog{flex:none;width:30px;height:30px;border:1px solid var(--ink);border-radius:50%;display:grid;place-items:center;transition:background .3s var(--ease),color .3s,transform .4s var(--ease)}
 .tog svg{width:12px;height:12px}
 .card-btn:hover .tog{transform:rotate(90deg)}
+.tog-l{position:absolute;right:0;bottom:40px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .35s var(--ease);white-space:nowrap}
+.card-btn:hover .tog-l,.card-btn:focus-visible .tog-l{opacity:1;transform:none}
+.card-btn[aria-expanded="true"] .tog-l{opacity:0}
+.tog-g{position:relative;flex:none;display:flex}
+.cards.invite .tog{animation:invite 1.6s var(--ease) 2;animation-delay:calc(.6s + var(--k)*.12s)}
+@keyframes invite{0%,100%{box-shadow:0 0 0 0 rgba(248,62,31,0);background:transparent}35%{box-shadow:0 0 0 6px rgba(248,62,31,.18);background:var(--or);color:#fff;border-color:var(--or)}}
 .card-btn[aria-expanded="true"] .tog{background:var(--ink);color:var(--bg);transform:rotate(45deg)}
 
 /* panel: grid-row trick animates height without measuring */
@@ -200,7 +209,7 @@ section{position:relative}
 .beyond .eyebrow{color:#A8A39C}
 .beyond .h2{font-size:clamp(46px,6vw,80px);color:#fff}
 .beyond .ol{color:var(--ink);-webkit-text-stroke:3px #fff;paint-order:stroke fill;transition:color .5s var(--ease)}
-.beyond .h2:hover .ol{color:#fff}
+.beyond .h2:hover .ol{color:#fff;-webkit-text-stroke-width:0}
 .beyond .h2 .dot{color:var(--or);-webkit-text-stroke:0}
 .btext{display:grid;gap:20px;max-width:54ch;font-size:16.5px}
 .btext p{margin:0}
@@ -366,6 +375,113 @@ section{position:relative}
 .react{position:absolute;right:-6px;bottom:-14px;background:var(--bg);border:1px solid rgba(22,22,21,.12);border-radius:12px;padding:1px 6px;font-size:13px;line-height:1.4}
 .chat.seq .react{opacity:0;transform:scale(.3)}
 .chat.seq.done .react{opacity:1;transform:none;transition:opacity .2s,transform .45s cubic-bezier(.3,1.7,.45,1) .5s}
+
+/* ---------- skills unlocked: editorial accordion rows ---------- */
+.sk-main{grid-template-columns:56px minmax(0,1fr)}
+.sk-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:8px 24px}
+.sk-head .eyebrow{grid-column:1/-1}
+.sk-head .h2{font-size:clamp(46px,6.4vw,92px);line-height:.92}
+.sk-count{margin:0 0 10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-variant-numeric:tabular-nums}
+.sk-c{color:var(--ink);font-weight:500}
+.sk-list{grid-column:2;list-style:none;margin:clamp(48px,5vw,72px) 0 0;padding:0;border-top:1px solid var(--ink)}
+.sr{position:relative;border-bottom:1px solid rgba(22,22,21,.16)}
+.sr::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--acc,var(--or));transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.sr:nth-child(even){--acc:var(--bl)}
+.sr:hover::after,.sr:focus-within::after,.sr.open::after{transform:scaleX(1)}
+.sr-h{margin:0;font:inherit}
+.sr-btn{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:80px minmax(0,1fr) minmax(0,1.15fr) 110px;gap:8px 32px;align-items:baseline;padding:28px 0 30px}
+.sr-btn:focus-visible{outline:2px solid var(--bl);outline-offset:4px}
+.sr-n{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;display:inline-flex;align-items:center;gap:10px}
+.sr-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ink);transition:background .3s,border-color .3s,transform .4s var(--ease)}
+.sr-t{font:800 clamp(22px,2.3vw,32px)/1.05 var(--sans);letter-spacing:-.035em;color:var(--ink);transition:color .35s var(--ease);
+  -webkit-text-stroke:0 var(--ink);paint-order:stroke fill;text-wrap:balance}
+.sr-d{font-size:15.5px;line-height:1.5;color:#3A3734;max-width:52ch}
+.sr-i{justify-self:end;display:inline-flex;align-items:center;gap:12px;align-self:center}
+.sr-x{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:0;transform:translateX(6px);transition:opacity .3s,transform .35s var(--ease)}
+.sr-pm{width:30px;height:30px;border:1px solid var(--ink);border-radius:50%;position:relative;flex:none;transition:background .3s,border-color .3s}
+.sr-pm::before,.sr-pm::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1.4px;background:currentColor;transform:translate(-50%,-50%);transition:transform .4s var(--ease)}
+.sr-pm::after{transform:translate(-50%,-50%) rotate(90deg)}
+/* hover / focus: title goes outline, accent appears, indicator wakes up */
+.sr-btn:hover .sr-t,.sr-btn:focus-visible .sr-t{color:var(--bg);-webkit-text-stroke:2px var(--ink)}
+.sr.open .sr-btn .sr-t{-webkit-text-stroke:0}
+.sr-btn:hover .sr-dot,.sr-btn:focus-visible .sr-dot{border-color:var(--acc,var(--or));transform:scale(1.2)}
+.sr-btn:hover .sr-x,.sr-btn:focus-visible .sr-x{opacity:1;transform:none}
+.sr-btn:hover .sr-pm,.sr-btn:focus-visible .sr-pm{border-color:var(--acc,var(--or))}
+/* explored (visited) rows keep a quiet trace */
+.sr.seen .sr-dot{background:var(--sand);border-color:var(--sand)}
+/* open */
+.sr.open .sr-t{color:var(--ink)}
+.sr.open .sr-dot{background:var(--acc,var(--or));border-color:var(--acc,var(--or));transform:none}
+.sr.open .sr-x{opacity:0}
+.sr.open .sr-pm{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.sr.open .sr-pm::after{transform:translate(-50%,-50%) rotate(0deg)}
+.sr-p{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
+.sr.open .sr-p{grid-template-rows:1fr}
+.sr-pin{overflow:hidden;min-height:0}
+.sr-body{margin-left:112px;padding:0 142px 40px 0;columns:2;column-gap:40px;opacity:0;transform:translateY(-6px);transition:opacity .3s,transform .4s var(--ease)}
+.sr.open .sr-body{opacity:1;transform:none;transition-delay:.12s}
+.sr-body p{margin:0 0 14px;break-inside:avoid;font-size:15.5px;line-height:1.6;color:#2A2826}
+.sr-body p:first-child{font-weight:500;color:var(--ink)}
+@media (max-width:1180px){.sr-btn{grid-template-columns:64px minmax(0,1fr) 90px;row-gap:10px}.sr-d{grid-column:2}.sr-i{grid-row:1;grid-column:3}.sr-body{margin-left:96px;padding-right:0}}
+@media (max-width:720px){
+  .sk-head{grid-template-columns:1fr}.sk-count{margin:8px 0 0}
+  .sr-btn{grid-template-columns:minmax(0,1fr) 44px;padding:22px 0 24px;gap:10px 16px}
+  .sr-n{grid-column:1}.sr-t,.sr-d{grid-column:1}.sr-i{grid-column:2;grid-row:1/span 3;align-self:start}.sr-x{display:none}
+  .sr-pm{width:40px;height:40px}
+  .sr-body{margin-left:0;columns:1;padding:0 0 28px}}
+@media (max-width:440px){.sk-main{grid-template-columns:28px minmax(0,1fr)}}
+
+/* ---------- beyond the job title: six shapes, each opens a short definition ---------- */
+.caps-row{grid-template-columns:56px minmax(0,1fr)}
+.caps-row>.caps2{grid-column:2;margin-top:clamp(40px,5vw,72px)}
+@media (max-width:980px){.caps-row{grid-template-columns:40px minmax(0,1fr)}}
+@media (max-width:440px){.caps-row{grid-template-columns:28px minmax(0,1fr)}}
+.caps2{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 28px;align-items:center;justify-items:center}
+.caps2 .cap:nth-child(2){margin-top:90px}.caps2 .cap:nth-child(3){margin-top:-30px}
+.caps2 .cap:nth-child(4){margin-top:-20px}.caps2 .cap:nth-child(5){margin-top:60px}.caps2 .cap:nth-child(6){margin-top:10px}
+.cap{position:relative;width:var(--w,250px);height:var(--h,250px);max-width:100%}
+.cap.sq{--w:236px;--h:236px}.cap.half{--w:250px;--h:236px}.cap.circ{--w:260px;--h:260px}
+.cap.recth{--w:310px;--h:200px}.cap.rectv{--w:204px;--h:290px}.cap.duo{--w:250px;--h:250px}
+.cap-b{all:unset;box-sizing:border-box;position:relative;display:grid;place-items:center;width:100%;height:100%;cursor:pointer;text-align:center;padding:30px}
+.cap-b:focus-visible{outline:2px solid var(--bl);outline-offset:6px}
+.cap-sh{position:absolute;inset:0;border:1.5px solid var(--c);transition:background .45s var(--ease),transform .5s var(--ease)}
+.sq .cap-sh{border-radius:0}.circ .cap-sh,.duo .cap-sh{border-radius:50%}.half .cap-sh{border-radius:0 999px 999px 0}
+.recth .cap-sh,.rectv .cap-sh{border-radius:0}
+.duo .cap-sh::after{content:"";position:absolute;inset:-1.5px;border-radius:50%;border:1.5px solid var(--c);transform:translate(26%,-14%);opacity:.35;pointer-events:none;transition:transform .5s var(--ease)}
+.cap.is-s .cap-sh{background:var(--c)}
+.cap-tx{position:relative;display:grid;gap:10px;max-width:22ch;color:var(--ink);transition:color .4s}
+.cap.is-s .cap-tx{color:#fff}.cap.is-s.dark .cap-tx{color:var(--ink)}
+.cap-n{font:700 clamp(16px,1.35vw,19px)/1.15 var(--sans);letter-spacing:-.015em;transform:translateY(0);transition:transform .45s var(--ease)}
+.cap-d{font-size:13.5px;line-height:1.45;max-height:0;opacity:0;overflow:hidden;transition:max-height .45s var(--ease),opacity .3s}
+/* active: shape swaps solid/outline, the name lifts, the definition appears */
+.cap:hover .cap-n,.cap-b:focus-visible .cap-n,.cap.on .cap-n{transform:translateY(-2px)}
+.cap:hover .cap-d,.cap-b:focus-visible .cap-d,.cap.on .cap-d{max-height:9em;opacity:1;transition-delay:0s,.12s}
+.cap.is-o:hover .cap-sh,.cap.is-o .cap-b:focus-visible .cap-sh,.cap.is-o.on .cap-sh{background:var(--c)}
+.cap.is-o:hover .cap-tx,.cap.is-o .cap-b:focus-visible .cap-tx,.cap.is-o.on .cap-tx{color:#fff}
+.cap.is-s:hover .cap-sh,.cap.is-s .cap-b:focus-visible .cap-sh,.cap.is-s.on .cap-sh{background:transparent}
+.cap.is-s:hover .cap-tx,.cap.is-s .cap-b:focus-visible .cap-tx,.cap.is-s.on .cap-tx{color:var(--ink)}
+.cap:hover .cap-sh,.cap.on .cap-sh{transform:scale(1.03)}
+.duo:hover .cap-sh::after,.duo.on .cap-sh::after{transform:translate(18%,-8%)}
+@media (max-width:1180px){.caps2{grid-template-columns:repeat(2,minmax(0,1fr))}.caps2 .cap{margin-top:0!important}}
+@media (max-width:720px){
+  .caps2{grid-template-columns:1fr;gap:0;justify-items:stretch}
+  .cap{width:auto;height:auto;border-bottom:1px solid rgba(22,22,21,.15)}
+  .cap-b{display:grid;grid-template-columns:56px minmax(0,1fr);gap:18px;place-items:start;text-align:left;padding:20px 0}
+  .cap-sh{position:relative;inset:auto;width:56px;height:56px}
+  .recth .cap-sh{height:36px;margin-top:10px}.rectv .cap-sh{width:38px;height:56px;margin-left:9px}
+  .cap:hover .cap-sh,.cap.on .cap-sh{transform:none}
+  .cap-tx,.cap.is-s .cap-tx,.cap.is-s.dark .cap-tx{color:var(--ink)!important;max-width:none}
+  .cap.is-o.on .cap-sh{background:var(--c)}
+  .cap-d{max-height:none;opacity:1;font-size:15px}}
+
+/* chat on dark (beyond the pixels) */
+.chat.dark .b{background:#262624;color:#EDEAE6;box-shadow:none}
+.chat.dark .b.wink{background:#EDEAE6;color:var(--ink)}
+.chat.dark .typing{background:#262624}
+.chat.dark .av{box-shadow:0 0 0 2px var(--ink),0 0 0 3.5px var(--or)}
+.chat.dark .react{background:var(--ink);border-color:#3A3836}
+.bchat{max-width:640px}
+@media (max-width:980px){.beyond .bchat{grid-column:2;margin-top:44px}}
 </style>
 </head>
 <body>
@@ -430,11 +546,14 @@ section{position:relative}
           <p class="eyebrow">What I’ve done</p>
           <h2 class="h2" id="h-work">Diseño cosas.<br>Y también cómo hacemos las cosas.</h2>
         </div>
-        <p>He trabajado diseñando productos digitales, construyendo equipos, desarrollando metodologías y ayudando a organizaciones a tomar mejores decisiones. Estos son algunos de los desafíos en los que he participado.</p>
+        <div class="work-intro">
+          <p>He trabajado diseñando productos digitales, construyendo equipos, desarrollando metodologías y ayudando a organizaciones a tomar mejores decisiones. Estos son algunos de los desafíos en los que he participado.</p>
+          <p class="hint"><span class="hint-plus" aria-hidden="true">+</span>Abre cada desafío para conocer la historia completa</p>
+        </div>
       </div>
     </div>
+    <div class="cards" id="cards"></div>
   </div>
-  <div class="cards" id="cards"></div>
 </section>
 
 <!-- 03 · THINK -->
@@ -483,13 +602,78 @@ section{position:relative}
 <!-- 05 · SKILLS -->
 <section class="skills" id="skills" aria-labelledby="h-skills">
   <div class="wrap">
-    <div class="sk-row">
+    <div class="sk-row sk-main">
       <span class="idx sec-num" aria-hidden="true">05</span>
-      <div class="reveal">
+      <div class="reveal sk-head">
         <p class="eyebrow">01 / Knowledge &amp; Practice</p>
         <h2 class="h2" id="h-skills">Things I’ve learned to do.</h2>
+        <p class="sk-count" aria-live="polite"><span class="sk-c">0</span> / 8 explored</p>
       </div>
-      <ul class="kp" data-stagger aria-label="Disciplinas"><li tabindex="0"><span class="kn">Experience & Product Design</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#161615"><circle class="d s" fill="#161615" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">UX Research & Discovery</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#013BF6"><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">Product & Design Strategy</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#161615"><circle class="d s" fill="#161615" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">Creative Direction & Branding</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#F83E1F"><circle class="d s" fill="#F83E1F" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d s" fill="#F83E1F" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F83E1F" stroke-width="1.4" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F83E1F" stroke-width="1.4" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d s" fill="#F83E1F" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d s" fill="#F83E1F" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F83E1F" stroke-width="1.4" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d s" fill="#F83E1F" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F83E1F" stroke-width="1.4" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">Design Leadership & Talent Development</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#161615"><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">DesignOps & Ways of Working</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#013BF6"><circle class="d s" fill="#013BF6" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#013BF6" stroke-width="1.4" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d s" fill="#013BF6" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">UX Measurement & Optimization</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#F8A829"><circle class="d s" fill="#F8A829" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F8A829" stroke-width="1.4" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F8A829" stroke-width="1.4" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d s" fill="#F8A829" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F8A829" stroke-width="1.4" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d s" fill="#F8A829" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d s" fill="#F8A829" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d s" fill="#F8A829" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#F8A829" stroke-width="1.4" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li><li tabindex="0"><span class="kn">AI Applied to Design</span><svg class="dots" viewBox="0 0 200 20" aria-hidden="true" style="--c:#161615"><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:0" cx="10" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:1" cx="32" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:2" cx="54" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:3" cx="76" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:4" cx="98" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:5" cx="120" cy="10" r="7.5"/><circle class="d" fill="none" stroke="#161615" stroke-width="1.4" style="--i:6" cx="142" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:7" cx="164" cy="10" r="7.5"/><circle class="d s" fill="#161615" style="--i:8" cx="186" cy="10" r="7.5"/></svg></li></ul>
+      <ol class="sk-list" data-stagger><li class="sr">
+  <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-01" aria-expanded="false" aria-controls="sp-01">
+    <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>01</span>
+    <span class="sr-t">Experience &amp; Product Design</span>
+    <span class="sr-d">Diseño experiencias y productos digitales, desde la comprensión del problema hasta su implementación y evolución.</span>
+    <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
+  </button></h3>
+  <div class="sr-p" id="sp-01" role="region" aria-labelledby="sb-01" inert><div class="sr-pin"><div class="sr-body"><p>Mi experiencia incluye diseño de interfaces, arquitectura de información, interacción, productos digitales y servicios.</p><p>He trabajado en entornos empresariales complejos, conectando necesidades de las personas con objetivos de negocio y restricciones tecnológicas.</p></div></div></div>
+</li><li class="sr">
+  <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-02" aria-expanded="false" aria-controls="sp-02">
+    <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>02</span>
+    <span class="sr-t">UX Research &amp; Discovery</span>
+    <span class="sr-d">Diseño investigaciones, analizo comportamientos y utilizo evidencia para orientar decisiones.</span>
+    <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
+  </button></h3>
+  <div class="sr-p" id="sp-02" role="region" aria-labelledby="sb-02" inert><div class="sr-pin"><div class="sr-body"><p>He trabajado con entrevistas, encuestas, pruebas de usabilidad, card sorting, evaluaciones heurísticas y análisis de información cualitativa.</p><p>También he diseñado herramientas y metodologías para incorporar actividades de investigación y validación al trabajo cotidiano de los equipos.</p></div></div></div>
+</li><li class="sr">
+  <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-03" aria-expanded="false" aria-controls="sp-03">
+    <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>03</span>
+    <span class="sr-t">Product &amp; Design Strategy</span>
+    <span class="sr-d">Conecto necesidades de las personas, objetivos de negocio y capacidades tecnológicas para definir oportunidades y soluciones.</span>
+    <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
+  </button></h3>
+  <div class="sr-p" id="sp-03" role="region" aria-labelledby="sb-03" inert><div class="sr-pin"><div class="sr-body"><p>He participado en la definición de estrategias de experiencia, priorización de oportunidades y estructuración de iniciativas digitales.</p><p>Me interesa especialmente identificar qué problema necesitamos resolver y qué evidencia tenemos para tomar una decisión.</p></div></div></div>
+</li><li class="sr">
+  <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-04" aria-expanded="false" aria-controls="sp-04">
+    <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>04</span>
+    <span class="sr-t">Creative Direction &amp; Branding</span>
+    <span class="sr-d">Desarrollo conceptos, identidades y direcciones creativas que conectan estrategia, comunicación y expresión visual.</span>
+    <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
+  </button></h3>
+  <div class="sr-p" id="sp-04" role="region" aria-labelledby="sb-04" inert><div class="sr-pin"><div class="sr-body"><p>Mi trayectoria comenzó en comunicación visual y dirección de arte.</p><p>Durante mi etapa en Agencia Digital Cardumen fui directora de arte, directora creativa y directora de creatividad y estrategia.</p><p>Esta experiencia sigue influyendo en mi manera de abordar el diseño de productos y experiencias digitales.</p></div></div></div>
+</li><li class="sr">
+  <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-05" aria-expanded="false" aria-controls="sp-05">
+    <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>05</span>
+    <span class="sr-t">Design Leadership &amp; Talent Development</span>
+    <span class="sr-d">Lidero equipos y desarrollo capacidades de diseño, desde planes de carrera hasta mentorías y estructuras de trabajo.</span>
+    <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
+  </button></h3>
+  <div class="sr-p" id="sp-05" role="region" aria-labelledby="sb-05" inert><div class="sr-pin"><div class="sr-body"><p>Mi experiencia incluye liderazgo de organizaciones de más de 80 profesionales.</p><p>En Multiplica desarrollé y lideré la implementación de planes de carrera para especialidades como UX, UI, UX Writing, Product Design y Service Design.</p><p>También he participado en selección de talento, evaluaciones de desempeño y mentorías.</p><p>En 2025 acompañé el desarrollo profesional de cinco diseñadoras como Performance Partner.</p></div></div></div>
+</li><li class="sr">
+  <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-06" aria-expanded="false" aria-controls="sp-06">
+    <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>06</span>
+    <span class="sr-t">DesignOps &amp; Ways of Working</span>
+    <span class="sr-d">Diseño metodologías, procesos y herramientas que ayudan a los equipos a organizarse, colaborar y tomar decisiones.</span>
+    <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
+  </button></h3>
+  <div class="sr-p" id="sp-06" role="region" aria-labelledby="sb-06" inert><div class="sr-pin"><div class="sr-body"><p>He trabajado en la definición y evolución de prácticas de diseño, procesos de onboarding, documentación y gestión del conocimiento.</p><p>También he desarrollado enfoques que conectan investigación, discovery, definición y delivery.</p><p>Busco adaptar las metodologías al contexto y las necesidades reales de cada equipo.</p></div></div></div>
+</li><li class="sr">
+  <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-07" aria-expanded="false" aria-controls="sp-07">
+    <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>07</span>
+    <span class="sr-t">UX Measurement &amp; Optimization</span>
+    <span class="sr-d">Incorporo métricas de experiencia y producto para evaluar decisiones e identificar oportunidades de mejora.</span>
+    <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
+  </button></h3>
+  <div class="sr-p" id="sp-07" role="region" aria-labelledby="sb-07" inert><div class="sr-pin"><div class="sr-body"><p>He trabajado con métricas de percepción, usabilidad y producto, además de iniciativas relacionadas con optimización de conversión.</p><p>En 2025 desarrollé la charla <em>Del criterio a la evidencia</em>, enfocada en conectar decisiones de diseño con resultados observables.</p></div></div></div>
+</li><li class="sr">
+  <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-08" aria-expanded="false" aria-controls="sp-08">
+    <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>08</span>
+    <span class="sr-t">AI Applied to Design</span>
+    <span class="sr-d">Exploro e implemento herramientas de IA para investigación, documentación, automatización y desarrollo asistido.</span>
+    <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
+  </button></h3>
+  <div class="sr-p" id="sp-08" role="region" aria-labelledby="sb-08" inert><div class="sr-pin"><div class="sr-body"><p>He creado asistentes GPT especializados y explorado aplicaciones de IA en análisis de investigaciones, síntesis de información, documentación y organización del conocimiento.</p><p>Actualmente también experimento con automatizaciones y desarrollo asistido por inteligencia artificial.</p></div></div></div>
+</li></ol>
     </div>
     <div class="sk-row caps-row">
       <span aria-hidden="true"></span>
@@ -497,7 +681,7 @@ section{position:relative}
         <p class="eyebrow">02 / Beyond the Job Title</p>
         <h3 class="h3">Lo que llevo a cualquier rol.</h3>
       </div>
-      <ul class="caps" data-stagger aria-label="Capacidades transversales"><li class="cc is-o" tabindex="0" style="--sz:230px;--off:0px;--c:#161615"><span>Pensamiento estructurado</span></li><li class="cc is-s" tabindex="0" style="--sz:176px;--off:70px;--c:#161615"><span>Pensamiento crítico</span></li><li class="cc is-s" tabindex="0" style="--sz:204px;--off:-10px;--c:#F83E1F"><span>Creatividad</span></li><li class="cc is-o" tabindex="0" style="--sz:196px;--off:96px;--c:#013BF6"><span>Comunicación & Storytelling</span></li><li class="cc is-s" tabindex="0" style="--sz:160px;--off:20px;--c:#F8A829"><span>Adaptabilidad</span></li><li class="cc is-o" tabindex="0" style="--sz:214px;--off:-30px;--c:#161615"><span>Colaboración & Mentoring</span></li></ul>
+      <ul class="caps2" data-stagger aria-label="Capacidades transversales"><li class="cap sq is-o" style="--c:#161615"><button class="cap-b" type="button" aria-expanded="false" aria-describedby="cd0"><span class="cap-sh" aria-hidden="true"></span><span class="cap-tx"><span class="cap-n">Pensamiento estructurado</span><span class="cap-d" id="cd0">Me gusta encontrarle un orden a las cosas, incluso cuando al principio parecen un enredo.</span></span></button></li><li class="cap half is-s" style="--c:#161615"><button class="cap-b" type="button" aria-expanded="false" aria-describedby="cd1"><span class="cap-sh" aria-hidden="true"></span><span class="cap-tx"><span class="cap-n">Pensamiento crítico</span><span class="cap-d" id="cd1">Me gusta hacer preguntas incómodas y poner a prueba las ideas. Las mías también.</span></span></button></li><li class="cap circ is-s" style="--c:#F83E1F"><button class="cap-b" type="button" aria-expanded="false" aria-describedby="cd2"><span class="cap-sh" aria-hidden="true"></span><span class="cap-tx"><span class="cap-n">Creatividad</span><span class="cap-d" id="cd2">Me gusta imaginar posibilidades, probar ideas y ver qué pasa. A veces funciona. A veces sale algo mejor.</span></span></button></li><li class="cap recth is-o" style="--c:#013BF6"><button class="cap-b" type="button" aria-expanded="false" aria-describedby="cd3"><span class="cap-sh" aria-hidden="true"></span><span class="cap-tx"><span class="cap-n">Comunicación &amp; Storytelling</span><span class="cap-d" id="cd3">Me gusta encontrar formas de contar cosas complejas sin aburrir a nadie en el intento.</span></span></button></li><li class="cap rectv is-s dark" style="--c:#F8A829"><button class="cap-b" type="button" aria-expanded="false" aria-describedby="cd4"><span class="cap-sh" aria-hidden="true"></span><span class="cap-tx"><span class="cap-n">Adaptabilidad</span><span class="cap-d" id="cd4">Si cambia el escenario, cambio la manera de abordarlo. Y aprendo lo que haga falta.</span></span></button></li><li class="cap duo is-o" style="--c:#161615"><button class="cap-b" type="button" aria-expanded="false" aria-describedby="cd5"><span class="cap-sh" aria-hidden="true"></span><span class="cap-tx"><span class="cap-n">Colaboración &amp; Mentoring</span><span class="cap-d" id="cd5">Me gusta compartir lo que sé. Y descubrir todo lo que puedo aprender de otros.</span></span></button></li></ul>
     </div>
   </div>
   <div class="interests">
@@ -517,13 +701,9 @@ section{position:relative}
       <p class="eyebrow">Beyond the pixels</p>
       <h2 class="h2" id="h-beyond">También hago otras <span class="ol">cosas</span><span class="dot">.</span></h2>
     </div>
-    <div class="btext" data-stagger>
-      <p>Escribo cuentos un poco extraños. En uno de ellos, alguien termina guardando sus pestañas en una bolsa Ziploc.</p>
-      <p>Me gusta ilustrar, pintar y experimentar con materiales. Puedo pasar bastante tiempo buscando un papel, una técnica o un color específico.</p>
-      <p>Juego fútbol. También videojuegos. Y me tomo ambas cosas probablemente más en serio de lo necesario.</p>
-      <p>Me gustan los libros, la música, la tecnología y aprender cosas que no necesariamente tienen relación con mi trabajo.</p>
-      <p>A veces empiezo a investigar algo por una pregunta pequeña y termino varias horas después en un tema completamente distinto.</p>
-      <p class="last">No siempre sale algo útil de eso.</p>
+    <div class="chat dark bchat" aria-label="Mensajes de Danny" data-when="view">
+      <img class="av" src="danny.jpg" width="72" height="72" alt="" decoding="async" loading="lazy">
+      <div class="bubbles"><p class="b first"><span class="who">Danny</span>Escribo cuentos un poco extraños. En uno de ellos, alguien termina guardando sus pestañas en una bolsa Ziploc. ✍️</p><p class="b">Me gusta ilustrar, pintar y experimentar con materiales. Puedo pasar bastante tiempo buscando un papel, una técnica o un color específico. 🎨</p><p class="b">Juego fútbol. También videojuegos. Y me tomo ambas cosas probablemente más en serio de lo necesario. ⚽🎮</p><p class="b">Me gustan los libros, la música, la tecnología y aprender cosas que no necesariamente tienen relación con mi trabajo. 📚🎧</p><p class="b">A veces empiezo a investigar algo por una pregunta pequeña y termino varias horas después en un tema completamente distinto. 🐇🕳️</p><p class="b wink">No siempre sale algo útil de eso. 🤷‍♀️<span class="react" aria-label="Reacción: risa">😂</span></p><p class="typing" aria-hidden="true" hidden><i></i><i></i><i></i></p></div>
     </div>
     <!-- Espacio preparado para ilustraciones, pinturas o fotos reales: agregar <figure> aquí y se mostrará. -->
     <div class="beyond-media"></div>
@@ -633,7 +813,7 @@ cardsEl.innerHTML=CARDS.map((c,i)=>`
   <h3 style="margin:0;height:100%"><button class="card-btn" type="button" id="cb-${c.n}" aria-expanded="false" aria-controls="p-${c.n}">
    <span class="n">${c.n}</span><span class="t">${c.t}</span>
    <svg class="glyph" viewBox="0 0 150 100" aria-hidden="true">${c.glyph}</svg>
-   <span class="card-foot"><span class="tags">${c.tags.join('<br>')}</span><span class="tog">${plus}</span></span>
+   <span class="card-foot"><span class="tags">${c.tags.join('<br>')}</span><span class="tog-g"><span class="tog-l">Ver más</span><span class="tog" style="--k:${i}">${plus}</span></span></span>
   </button></h3>
  </article>
  <div class="panel" id="p-${c.n}" role="region" aria-labelledby="cb-${c.n}" style="order:${i*2+1}">
@@ -666,10 +846,11 @@ btns.forEach((b,i)=>b.addEventListener('click',()=>setOpen(openIdx===i?-1:i)));
 panels.forEach(p=>p.inert=true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openIdx>=0){const b=btns[openIdx];setOpen(-1);b.focus()}});
 place();addEventListener('resize',place);
+if('IntersectionObserver' in window){const iv=new IntersectionObserver(es=>{if(es[0].isIntersecting){cardsEl.classList.add('invite');iv.disconnect()}},{threshold:.5});iv.observe(cardsEl)}
+btns.forEach(b=>b.addEventListener('click',()=>cardsEl.classList.remove('invite')));
 
-document.querySelectorAll('.kp li').forEach(li=>li.addEventListener('click',()=>{const on=!li.classList.contains('on');document.querySelectorAll('.kp li.on').forEach(x=>x.classList.remove('on'));li.classList.toggle('on',on)}));
 /* ---------- hero chat: messages arrive one by one ---------- */
-(()=>{const chat=document.querySelector('.chat');if(!chat)return;
+document.querySelectorAll('.chat').forEach(chat=>{
   const bs=[...chat.querySelectorAll('.b')],ty=chat.querySelector('.typing');
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const fit=()=>chat.style.setProperty('--chat-h',chat.offsetHeight+'px');fit();   // reserve the final height: no layout jump
@@ -680,7 +861,20 @@ document.querySelectorAll('.kp li').forEach(li=>li.addEventListener('click',()=>
   let i=0;const next=()=>{if(i>=bs.length){ty.hidden=true;chat.style.removeProperty('--chat-h');follow();chat.classList.add('done');addEventListener('resize',follow);return}
     ty.hidden=false;bs[i].parentNode.insertBefore(ty,bs[i]);follow();
     setTimeout(()=>{ty.hidden=true;bs[i].classList.remove('wait');bs[i].classList.add('pop');i++;follow();setTimeout(next,i<bs.length?260:0)},i===0?700:Math.min(1100,350+bs[i].textContent.length*4))};
-  setTimeout(next,400)})();
+  const go=()=>setTimeout(next,400);
+  if(chat.dataset.when==='view'&&'IntersectionObserver' in window){const o=new IntersectionObserver(es=>{if(es[0].isIntersecting){o.disconnect();go()}},{threshold:.35});o.observe(chat)}else go()});
+/* ---------- skills unlocked: one open at a time, count what you've explored ---------- */
+(()=>{const rows=[...document.querySelectorAll('.sr')];if(!rows.length)return;const seen=new Set(),cnt=document.querySelector('.sk-c');
+  rows.forEach((r,i)=>{const b=r.querySelector('.sr-btn'),p=r.querySelector('.sr-p');
+    b.addEventListener('click',()=>{const open=!r.classList.contains('open');
+      rows.forEach(o=>{o.classList.remove('open');o.querySelector('.sr-btn').setAttribute('aria-expanded','false');o.querySelector('.sr-p').inert=true});
+      if(open){r.classList.add('open','seen');b.setAttribute('aria-expanded','true');p.inert=false;seen.add(i);cnt.textContent=seen.size;
+        if(seen.size===rows.length)document.querySelector('.sk-count').innerHTML='<span class="sk-c">8</span> / 8 explored. Nice.'}})});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=rows.find(r=>r.classList.contains('open'));if(o){o.querySelector('.sr-btn').click();o.querySelector('.sr-btn').focus()}}});
+})();
+/* ---------- capabilities: tap / click toggles the definition ---------- */
+(()=>{const cs=[...document.querySelectorAll('.cap')];cs.forEach(c=>{const b=c.querySelector('.cap-b');b.addEventListener('click',()=>{const on=!c.classList.contains('on');
+  cs.forEach(o=>{o.classList.remove('on');o.querySelector('.cap-b').setAttribute('aria-expanded','false')});if(on){c.classList.add('on');b.setAttribute('aria-expanded','true')}})})})();
 /* ---------- mobile menu ---------- */
 const mb=document.querySelector('.menu-btn'),nav=document.getElementById('nav');
 mb.addEventListener('click',()=>{const o=nav.classList.toggle('open');mb.setAttribute('aria-expanded',o);mb.textContent=o?'CLOSE':'MENU'});
