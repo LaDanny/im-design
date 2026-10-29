@@ -295,11 +295,11 @@ section{position:relative}
 .kp li{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,200px);align-items:center;gap:24px;padding:18px 0;border-bottom:1px solid rgba(22,22,21,.15);cursor:default;outline:none}
 .kp .kn{font:600 clamp(17px,1.5vw,20px)/1.2 var(--sans);letter-spacing:-.015em;transition:transform .45s var(--ease)}
 .kp .dots{width:100%;height:auto;overflow:visible}
-.kp .d{transform-box:fill-box;transform-origin:center;transition:transform .5s var(--ease),fill .35s,stroke .35s;transition-delay:calc(var(--i)*30ms)}
-.kp li:hover .kn,.kp li:focus-visible .kn{transform:translateX(8px)}
-.kp li:hover .d,.kp li:focus-visible .d{transform:translateX(-6px)}
-.kp li:hover .d:not(.s),.kp li:focus-visible .d:not(.s){fill:var(--c)}
-.kp li:hover .d.s,.kp li:focus-visible .d.s{fill:transparent;stroke:var(--c)}
+.kp .d{fill:transparent;stroke:var(--c);stroke-width:1.4px;transform-box:fill-box;transform-origin:center;transition:fill .25s var(--ease),transform .35s var(--ease);transition-delay:calc((8 - var(--i))*25ms)}
+.kp li:hover .kn,.kp li:focus-visible .kn,.kp li.on .kn{transform:translateX(8px)}
+.kp li:hover .d,.kp li:focus-visible .d,.kp li.on .d{fill:var(--c);transition-delay:calc(var(--i)*45ms)}
+.kp li:hover .d,.kp li:focus-visible .d{animation:dpop .4s var(--ease) both;animation-delay:calc(var(--i)*45ms)}
+@keyframes dpop{50%{transform:scale(1.25)}}
 .kp li:focus-visible{box-shadow:inset 3px 0 0 var(--bl)}
 .caps-row{margin-top:clamp(96px,10vw,150px)}
 .caps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:22px 18px;align-items:flex-start}
@@ -331,6 +331,41 @@ section{position:relative}
   .caps{gap:14px}.cc{width:calc(var(--sz)*.72);margin-top:calc(var(--off)*.4);padding:12px}
   .interests .eyebrow,.ints{padding-left:0}.ints{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:440px){.sk-row{grid-template-columns:28px minmax(0,1fr)}.cc{width:calc(var(--sz)*.62)}.cc span{font-size:13px}}
+
+/* ---------- hero chat: the intro, written by Danny ---------- */
+.chat{display:grid;grid-template-columns:72px minmax(0,1fr);gap:0 16px;max-width:600px;min-height:var(--chat-h,auto)}
+.av{width:72px;height:72px;border-radius:50%;object-fit:cover;align-self:end;transition:transform .45s var(--ease);box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--or)}
+.chat.seq .av{align-self:start}
+.bubbles{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:6px}
+.b{margin:0;background:#fff;color:#2A2826;font-size:16px;line-height:1.5;padding:10px 14px 11px;border-radius:6px 18px 18px 6px;max-width:100%;box-shadow:0 1px 0 rgba(22,22,21,.08)}
+.b.first{border-top-left-radius:18px}
+.b.wink{background:var(--ink);color:var(--bg);font-weight:500;border-bottom-left-radius:18px}
+.b .who{display:block;font:700 13px var(--sans);color:var(--or);margin-bottom:2px;letter-spacing:-.01em}
+.b.wait{display:none}
+.b.pop{animation:bIn .4s var(--ease) both}
+@keyframes bIn{from{opacity:0;transform:translateY(8px) scale(.97);transform-origin:left bottom}}
+.typing{margin:0;background:#fff;border-radius:18px;padding:12px 14px;display:inline-flex;gap:4px}
+.typing[hidden]{display:none}
+.typing i{width:7px;height:7px;border-radius:50%;background:#A8A39C;animation:tdot 1s ease-in-out infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tdot{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-3px);opacity:1}}
+@media (max-width:440px){.chat{grid-template-columns:52px minmax(0,1fr);gap:0 10px}.av{width:52px;height:52px}.b{font-size:15.5px}}
+
+/* ---------- scroll cue: a dot that keeps falling down a line ---------- */
+.cue{position:fixed;z-index:15;left:max(20px,calc((100vw - var(--max))/2 + 20px));bottom:calc(28px + env(safe-area-inset-bottom,0px));
+  display:flex;flex-direction:column;align-items:center;gap:10px;text-decoration:none;color:var(--ink);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.cue-l{position:relative;width:1px;height:56px;background:rgba(22,22,21,.25);overflow:hidden}
+.cue-l i{position:absolute;left:-3px;top:-8px;width:7px;height:7px;border-radius:50%;background:var(--or);animation:cueDot 1.8s cubic-bezier(.6,0,.4,1) infinite}
+@keyframes cueDot{0%{top:-8px}70%,100%{top:58px}}
+.cue-t{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg)}
+.cue.gone{opacity:0;transform:translateY(12px);pointer-events:none}
+@media (max-width:440px){.cue{left:max(12px,env(safe-area-inset-left,0px))}}
+@media (prefers-reduced-motion:reduce){.cue-l i{animation:none;top:24px}}
+
+.b.wink{position:relative}
+.react{position:absolute;right:-6px;bottom:-14px;background:var(--bg);border:1px solid rgba(22,22,21,.12);border-radius:12px;padding:1px 6px;font-size:13px;line-height:1.4}
+.chat.seq .react{opacity:0;transform:scale(.3)}
+.chat.seq.done .react{opacity:1;transform:none;transition:opacity .2s,transform .45s cubic-bezier(.3,1.7,.45,1) .5s}
 </style>
 </head>
 <body>
@@ -357,6 +392,7 @@ section{position:relative}
   </div>
 </header>
 
+<a class="cue" href="#work" aria-label="Bajar a la siguiente sección"><span class="cue-l" aria-hidden="true"><i></i></span><span class="cue-t">Scroll</span></a>
 <main id="main">
 
 <!-- 01 · HERO -->
@@ -365,12 +401,9 @@ section{position:relative}
     <span class="idx sec-num" aria-hidden="true">01</span>
     <div>
       <h1 id="h-hero">Hey,<br>I’m <span class="flip">Danny</span><span class="dot">.</span></h1>
-      <div class="copy" data-stagger>
-        <p>Soy Daniela Del Castillo. Llevo más de 20 años trabajando entre diseño, creatividad, tecnología y negocios.</p>
-        <p>Comencé en la comunicación visual. Después llegaron las experiencias digitales, los productos, los servicios, la estrategia y el liderazgo de equipos.</p>
-        <p>Hoy trabajo en problemas que necesitan distintas miradas. A veces diseño una experiencia, otras veces una metodología, una estrategia o una manera de organizar el trabajo.</p>
-        <p>Me gusta entender cómo funcionan las cosas, encontrar conexiones inesperadas y explorar ideas que todavía no sabemos muy bien cómo llevar a la práctica.</p>
-        <p class="wink">Y sí, todavía me entusiasma una buena tipografía.</p>
+      <div class="chat" aria-label="Mensajes de Danny">
+        <img class="av" src="danny.jpg" width="72" height="72" alt="Foto de Danny Del Castillo" decoding="async">
+        <div class="bubbles"><p class="b first"><span class="who">Danny</span>Soy Daniela Del Castillo. Llevo más de 20 años trabajando entre diseño, creatividad, tecnología y negocios. 👋</p><p class="b">Comencé en la comunicación visual. Después llegaron las experiencias digitales, los productos, los servicios, la estrategia y el liderazgo de equipos. 🎨→📱→🧭</p><p class="b">Hoy trabajo en problemas que necesitan distintas miradas. A veces diseño una experiencia, otras veces una metodología, una estrategia o una manera de organizar el trabajo. 🧩</p><p class="b">Me gusta entender cómo funcionan las cosas, encontrar conexiones inesperadas y explorar ideas que todavía no sabemos muy bien cómo llevar a la práctica. 🤔💡</p><p class="b wink">Y sí, todavía me entusiasma una buena tipografía. 🤓<span class="react" aria-label="Reacción: corazón">❤️</span></p><p class="typing" aria-hidden="true" hidden><i></i><i></i><i></i></p></div>
       </div>
     </div>
     <div class="hero-art reveal" style="--d:.15s">
@@ -634,6 +667,20 @@ panels.forEach(p=>p.inert=true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openIdx>=0){const b=btns[openIdx];setOpen(-1);b.focus()}});
 place();addEventListener('resize',place);
 
+document.querySelectorAll('.kp li').forEach(li=>li.addEventListener('click',()=>{const on=!li.classList.contains('on');document.querySelectorAll('.kp li.on').forEach(x=>x.classList.remove('on'));li.classList.toggle('on',on)}));
+/* ---------- hero chat: messages arrive one by one ---------- */
+(()=>{const chat=document.querySelector('.chat');if(!chat)return;
+  const bs=[...chat.querySelectorAll('.b')],ty=chat.querySelector('.typing');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const fit=()=>chat.style.setProperty('--chat-h',chat.offsetHeight+'px');fit();   // reserve the final height: no layout jump
+  const av=chat.querySelector('.av'),box=chat.querySelector('.bubbles');
+  const follow=()=>{const vis=[...box.children].filter(e=>!e.hidden&&!e.classList.contains('wait'));const last=vis[vis.length-1];if(!last)return;
+    const y=last.offsetTop+last.offsetHeight-av.offsetHeight;av.style.transform=`translateY(${Math.max(0,y)}px)`};
+  chat.classList.add('seq');bs.forEach(b=>b.classList.add('wait'));
+  let i=0;const next=()=>{if(i>=bs.length){ty.hidden=true;chat.style.removeProperty('--chat-h');follow();chat.classList.add('done');addEventListener('resize',follow);return}
+    ty.hidden=false;bs[i].parentNode.insertBefore(ty,bs[i]);follow();
+    setTimeout(()=>{ty.hidden=true;bs[i].classList.remove('wait');bs[i].classList.add('pop');i++;follow();setTimeout(next,i<bs.length?260:0)},i===0?700:Math.min(1100,350+bs[i].textContent.length*4))};
+  setTimeout(next,400)})();
 /* ---------- mobile menu ---------- */
 const mb=document.querySelector('.menu-btn'),nav=document.getElementById('nav');
 mb.addEventListener('click',()=>{const o=nav.classList.toggle('open');mb.setAttribute('aria-expanded',o);mb.textContent=o?'CLOSE':'MENU'});
@@ -641,7 +688,8 @@ nav.addEventListener('click',e=>{if(e.target.closest('a')&&nav.classList.contain
 
 /* ---------- header state, active section, gentle reveals ---------- */
 const hdr=document.querySelector('.hdr');
-addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>8),{passive:true});
+const cue=document.querySelector('.cue');
+addEventListener('scroll',()=>{hdr.classList.toggle('scrolled',scrollY>8);if(scrollY>60)cue.classList.add('gone')},{passive:true});
 const links=[...document.querySelectorAll('.nav a')];
 if('IntersectionObserver' in window){
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
