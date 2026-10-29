@@ -372,6 +372,8 @@ section{position:relative}
 @keyframes cueDot{0%{top:-8px}70%,100%{top:58px}}
 .cue-t{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg)}
 .cue.gone{opacity:0;transform:translateY(12px);pointer-events:none}
+.cue{transition:opacity .5s var(--ease),transform .5s var(--ease),color .3s}
+.cue.on-dark{color:#EDEAE6}.cue.on-dark .cue-l{background:rgba(237,234,230,.3)}
 @media (max-width:440px){.cue{left:max(12px,env(safe-area-inset-left,0px))}}
 @media (prefers-reduced-motion:reduce){.cue-l i{animation:none;top:24px}}
 
@@ -512,7 +514,7 @@ section{position:relative}
   </div>
 </header>
 
-<a class="cue" href="#work" aria-label="Bajar a la siguiente sección"><span class="cue-l" aria-hidden="true"><i></i></span><span class="cue-t">Scroll</span></a>
+<a class="cue" href="#work" aria-label="Ir a la siguiente sección"><span class="cue-l" aria-hidden="true"><i></i></span><span class="cue-t">Scroll</span></a>
 <main id="main">
 
 <!-- 01 · HERO -->
@@ -887,7 +889,17 @@ nav.addEventListener('click',e=>{if(e.target.closest('a')&&nav.classList.contain
 /* ---------- header state, active section, gentle reveals ---------- */
 const hdr=document.querySelector('.hdr');
 const cue=document.querySelector('.cue');
-addEventListener('scroll',()=>{hdr.classList.toggle('scrolled',scrollY>8);if(scrollY>60)cue.classList.add('gone')},{passive:true});
+/* scroll cue travels with you: points to the next section, adapts to dark bands, leaves at the end */
+const secs=[...document.querySelectorAll('main section[id]')];
+function cueUpdate(){
+  const y=scrollY+innerHeight*.35;let k=0;secs.forEach((sc,i)=>{if(sc.offsetTop<=y)k=i});
+  const nx=secs[k+1];
+  if(!nx||scrollY+innerHeight>=document.documentElement.scrollHeight-40){cue.classList.add('gone');return}
+  cue.classList.remove('gone');cue.href='#'+nx.id;
+  const r=cue.getBoundingClientRect();cue.style.pointerEvents='none';const el=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);cue.style.pointerEvents='';cue.classList.toggle('on-dark',!!(el&&el.closest('.beyond,.interests')));
+}
+let cueT=0;addEventListener('scroll',()=>{hdr.classList.toggle('scrolled',scrollY>8);cancelAnimationFrame(cueT);cueT=requestAnimationFrame(cueUpdate)},{passive:true});
+addEventListener('resize',cueUpdate);cueUpdate();
 const links=[...document.querySelectorAll('.nav a')];
 if('IntersectionObserver' in window){
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
