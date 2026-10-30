@@ -26,6 +26,7 @@
 <meta name="theme-color" content="#F4F4F2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,300,0,0&display=block">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-N4WK9QXE2F"></script>
@@ -488,6 +489,17 @@ section{position:relative}
 .chat.dark .react{background:var(--ink);border-color:#3A3836}
 .bchat{max-width:640px}
 @media (max-width:980px){.beyond .bchat{grid-column:2;margin-top:44px}}
+
+/* expanded skill: one aligned list under the description, each point with an icon */
+.sr-body{margin-left:0;padding:0 0 40px;columns:auto;display:grid;grid-template-columns:80px minmax(0,1fr) minmax(0,1.15fr) 110px;column-gap:32px}
+.sr-pts{grid-column:3;list-style:none;margin:0;padding:0;border-top:1px solid rgba(22,22,21,.12)}
+.sr-pts li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:14px;align-items:start;padding:14px 0;border-bottom:1px solid rgba(22,22,21,.08)}
+.sr-pts li:last-child{border-bottom:0}
+.sr-pts p{margin:0!important;font-weight:400!important;color:#2A2826!important}
+.msi{font-family:"Material Symbols Outlined";font-weight:300;font-size:22px;line-height:1;color:var(--acc,var(--or));font-variation-settings:"opsz" 24;
+  -webkit-font-feature-settings:"liga";font-feature-settings:"liga";white-space:nowrap;overflow:hidden;width:24px;margin-top:1px}
+@media (max-width:1180px){.sr-body{grid-template-columns:64px minmax(0,1fr) 90px}.sr-pts{grid-column:2}}
+@media (max-width:720px){.sr-body{grid-template-columns:1fr;padding:0 0 28px}.sr-pts{grid-column:1}}
 </style>
 </head>
 <body>
@@ -622,7 +634,7 @@ section{position:relative}
     <span class="sr-d">Diseño experiencias y productos digitales, desde la comprensión del problema hasta su implementación y evolución.</span>
     <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
   </button></h3>
-  <div class="sr-p" id="sp-01" role="region" aria-labelledby="sb-01" inert><div class="sr-pin"><div class="sr-body"><p>Mi experiencia incluye diseño de interfaces, arquitectura de información, interacción, productos digitales y servicios.</p><p>He trabajado en entornos empresariales complejos, conectando necesidades de las personas con objetivos de negocio y restricciones tecnológicas.</p></div></div></div>
+  <div class="sr-p" id="sp-01" role="region" aria-labelledby="sb-01" inert><div class="sr-pin"><div class="sr-body"><ul class="sr-pts"><li><span class="msi" aria-hidden="true">dashboard</span><p>Mi experiencia incluye diseño de interfaces, arquitectura de información, interacción, productos digitales y servicios.</p></li><li><span class="msi" aria-hidden="true">domain</span><p>He trabajado en entornos empresariales complejos, conectando necesidades de las personas con objetivos de negocio y restricciones tecnológicas.</p></li></ul></div></div></div>
 </li><li class="sr">
   <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-02" aria-expanded="false" aria-controls="sp-02">
     <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>02</span>
@@ -630,7 +642,7 @@ section{position:relative}
     <span class="sr-d">Diseño investigaciones, analizo comportamientos y utilizo evidencia para orientar decisiones.</span>
     <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
   </button></h3>
-  <div class="sr-p" id="sp-02" role="region" aria-labelledby="sb-02" inert><div class="sr-pin"><div class="sr-body"><p>He trabajado con entrevistas, encuestas, pruebas de usabilidad, card sorting, evaluaciones heurísticas y análisis de información cualitativa.</p><p>También he diseñado herramientas y metodologías para incorporar actividades de investigación y validación al trabajo cotidiano de los equipos.</p></div></div></div>
+  <div class="sr-p" id="sp-02" role="region" aria-labelledby="sb-02" inert><div class="sr-pin"><div class="sr-body"><ul class="sr-pts"><li><span class="msi" aria-hidden="true">forum</span><p>He trabajado con entrevistas, encuestas, pruebas de usabilidad, card sorting, evaluaciones heurísticas y análisis de información cualitativa.</p></li><li><span class="msi" aria-hidden="true">construction</span><p>También he diseñado herramientas y metodologías para incorporar actividades de investigación y validación al trabajo cotidiano de los equipos.</p></li></ul></div></div></div>
 </li><li class="sr">
   <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-03" aria-expanded="false" aria-controls="sp-03">
     <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>03</span>
@@ -638,7 +650,7 @@ section{position:relative}
     <span class="sr-d">Conecto necesidades de las personas, objetivos de negocio y capacidades tecnológicas para definir oportunidades y soluciones.</span>
     <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
   </button></h3>
-  <div class="sr-p" id="sp-03" role="region" aria-labelledby="sb-03" inert><div class="sr-pin"><div class="sr-body"><p>He participado en la definición de estrategias de experiencia, priorización de oportunidades y estructuración de iniciativas digitales.</p><p>Me interesa especialmente identificar qué problema necesitamos resolver y qué evidencia tenemos para tomar una decisión.</p></div></div></div>
+  <div class="sr-p" id="sp-03" role="region" aria-labelledby="sb-03" inert><div class="sr-pin"><div class="sr-body"><ul class="sr-pts"><li><span class="msi" aria-hidden="true">route</span><p>He participado en la definición de estrategias de experiencia, priorización de oportunidades y estructuración de iniciativas digitales.</p></li><li><span class="msi" aria-hidden="true">psychology_alt</span><p>Me interesa especialmente identificar qué problema necesitamos resolver y qué evidencia tenemos para tomar una decisión.</p></li></ul></div></div></div>
 </li><li class="sr">
   <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-04" aria-expanded="false" aria-controls="sp-04">
     <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>04</span>
@@ -646,7 +658,7 @@ section{position:relative}
     <span class="sr-d">Desarrollo conceptos, identidades y direcciones creativas que conectan estrategia, comunicación y expresión visual.</span>
     <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
   </button></h3>
-  <div class="sr-p" id="sp-04" role="region" aria-labelledby="sb-04" inert><div class="sr-pin"><div class="sr-body"><p>Mi trayectoria comenzó en comunicación visual y dirección de arte.</p><p>Durante mi etapa en Agencia Digital Cardumen fui directora de arte, directora creativa y directora de creatividad y estrategia.</p><p>Esta experiencia sigue influyendo en mi manera de abordar el diseño de productos y experiencias digitales.</p></div></div></div>
+  <div class="sr-p" id="sp-04" role="region" aria-labelledby="sb-04" inert><div class="sr-pin"><div class="sr-body"><ul class="sr-pts"><li><span class="msi" aria-hidden="true">palette</span><p>Mi trayectoria comenzó en comunicación visual y dirección de arte.</p></li><li><span class="msi" aria-hidden="true">campaign</span><p>Durante mi etapa en Agencia Digital Cardumen fui directora de arte, directora creativa y directora de creatividad y estrategia.</p></li><li><span class="msi" aria-hidden="true">auto_awesome</span><p>Esta experiencia sigue influyendo en mi manera de abordar el diseño de productos y experiencias digitales.</p></li></ul></div></div></div>
 </li><li class="sr">
   <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-05" aria-expanded="false" aria-controls="sp-05">
     <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>05</span>
@@ -654,7 +666,7 @@ section{position:relative}
     <span class="sr-d">Lidero equipos y desarrollo capacidades de diseño, desde planes de carrera hasta mentorías y estructuras de trabajo.</span>
     <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
   </button></h3>
-  <div class="sr-p" id="sp-05" role="region" aria-labelledby="sb-05" inert><div class="sr-pin"><div class="sr-body"><p>Mi experiencia incluye liderazgo de organizaciones de más de 80 profesionales.</p><p>En Multiplica desarrollé y lideré la implementación de planes de carrera para especialidades como UX, UI, UX Writing, Product Design y Service Design.</p><p>También he participado en selección de talento, evaluaciones de desempeño y mentorías.</p><p>En 2025 acompañé el desarrollo profesional de cinco diseñadoras como Performance Partner.</p></div></div></div>
+  <div class="sr-p" id="sp-05" role="region" aria-labelledby="sb-05" inert><div class="sr-pin"><div class="sr-body"><ul class="sr-pts"><li><span class="msi" aria-hidden="true">groups</span><p>Mi experiencia incluye liderazgo de organizaciones de más de 80 profesionales.</p></li><li><span class="msi" aria-hidden="true">stairs</span><p>En Multiplica desarrollé y lideré la implementación de planes de carrera para especialidades como UX, UI, UX Writing, Product Design y Service Design.</p></li><li><span class="msi" aria-hidden="true">person_search</span><p>También he participado en selección de talento, evaluaciones de desempeño y mentorías.</p></li><li><span class="msi" aria-hidden="true">handshake</span><p>En 2025 acompañé el desarrollo profesional de cinco diseñadoras como Performance Partner.</p></li></ul></div></div></div>
 </li><li class="sr">
   <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-06" aria-expanded="false" aria-controls="sp-06">
     <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>06</span>
@@ -662,7 +674,7 @@ section{position:relative}
     <span class="sr-d">Diseño metodologías, procesos y herramientas que ayudan a los equipos a organizarse, colaborar y tomar decisiones.</span>
     <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
   </button></h3>
-  <div class="sr-p" id="sp-06" role="region" aria-labelledby="sb-06" inert><div class="sr-pin"><div class="sr-body"><p>He trabajado en la definición y evolución de prácticas de diseño, procesos de onboarding, documentación y gestión del conocimiento.</p><p>También he desarrollado enfoques que conectan investigación, discovery, definición y delivery.</p><p>Busco adaptar las metodologías al contexto y las necesidades reales de cada equipo.</p></div></div></div>
+  <div class="sr-p" id="sp-06" role="region" aria-labelledby="sb-06" inert><div class="sr-pin"><div class="sr-body"><ul class="sr-pts"><li><span class="msi" aria-hidden="true">menu_book</span><p>He trabajado en la definición y evolución de prácticas de diseño, procesos de onboarding, documentación y gestión del conocimiento.</p></li><li><span class="msi" aria-hidden="true">conversion_path</span><p>También he desarrollado enfoques que conectan investigación, discovery, definición y delivery.</p></li><li><span class="msi" aria-hidden="true">tune</span><p>Busco adaptar las metodologías al contexto y las necesidades reales de cada equipo.</p></li></ul></div></div></div>
 </li><li class="sr">
   <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-07" aria-expanded="false" aria-controls="sp-07">
     <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>07</span>
@@ -670,7 +682,7 @@ section{position:relative}
     <span class="sr-d">Incorporo métricas de experiencia y producto para evaluar decisiones e identificar oportunidades de mejora.</span>
     <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
   </button></h3>
-  <div class="sr-p" id="sp-07" role="region" aria-labelledby="sb-07" inert><div class="sr-pin"><div class="sr-body"><p>He trabajado con métricas de percepción, usabilidad y producto, además de iniciativas relacionadas con optimización de conversión.</p><p>En 2025 desarrollé la charla <em>Del criterio a la evidencia</em>, enfocada en conectar decisiones de diseño con resultados observables.</p></div></div></div>
+  <div class="sr-p" id="sp-07" role="region" aria-labelledby="sb-07" inert><div class="sr-pin"><div class="sr-body"><ul class="sr-pts"><li><span class="msi" aria-hidden="true">monitoring</span><p>He trabajado con métricas de percepción, usabilidad y producto, además de iniciativas relacionadas con optimización de conversión.</p></li><li><span class="msi" aria-hidden="true">mic</span><p>En 2025 desarrollé la charla <em>Del criterio a la evidencia</em>, enfocada en conectar decisiones de diseño con resultados observables.</p></li></ul></div></div></div>
 </li><li class="sr">
   <h3 class="sr-h"><button class="sr-btn" type="button" id="sb-08" aria-expanded="false" aria-controls="sp-08">
     <span class="sr-n"><i class="sr-dot" aria-hidden="true"></i>08</span>
@@ -678,7 +690,7 @@ section{position:relative}
     <span class="sr-d">Exploro e implemento herramientas de IA para investigación, documentación, automatización y desarrollo asistido.</span>
     <span class="sr-i" aria-hidden="true"><span class="sr-x">Explore</span><span class="sr-pm"></span></span>
   </button></h3>
-  <div class="sr-p" id="sp-08" role="region" aria-labelledby="sb-08" inert><div class="sr-pin"><div class="sr-body"><p>He creado asistentes GPT especializados y explorado aplicaciones de IA en análisis de investigaciones, síntesis de información, documentación y organización del conocimiento.</p><p>Actualmente también experimento con automatizaciones y desarrollo asistido por inteligencia artificial.</p></div></div></div>
+  <div class="sr-p" id="sp-08" role="region" aria-labelledby="sb-08" inert><div class="sr-pin"><div class="sr-body"><ul class="sr-pts"><li><span class="msi" aria-hidden="true">smart_toy</span><p>He creado asistentes GPT especializados y explorado aplicaciones de IA en análisis de investigaciones, síntesis de información, documentación y organización del conocimiento.</p></li><li><span class="msi" aria-hidden="true">bolt</span><p>Actualmente también experimento con automatizaciones y desarrollo asistido por inteligencia artificial.</p></li></ul></div></div></div>
 </li></ol>
     </div>
     <div class="sk-row caps-row">
